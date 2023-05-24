@@ -1,7 +1,7 @@
 # Next.js + Contentlayer
 
-A template with Next.js 13 app dir, Contentlayer, Tailwind CSS and dark mode.
+Cloned from Vercel's Next.js 13, Contentlayer template. Modified by Kickblip.
+
+Template available here:
 
 https://next-contentlayer.vercel.app
-
-
