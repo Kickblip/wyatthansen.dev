@@ -19,7 +19,9 @@ export default function Home() {
                         <Link href={post.slug} className="no-underline">
                             <h2 className="text-2xl font-bold hover:underline cursor-pointe mb-1">{post.title}</h2>
                         </Link>
-                        <div className="text-sm">{post.description && <p>{post.description}</p>}</div>
+                        <div className="text-sm dark:text-[#9c9c9c] text-[#737478]">
+                            {post.description && <p>{post.description}</p>}
+                        </div>
                     </div>
                 </article>
             ))}
