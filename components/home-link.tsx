@@ -1,31 +1,33 @@
 "use client"
 
 import { useTheme } from "next-themes"
-import { withRouter, NextRouter } from "next/router"
 
-interface HomeLinkProps {
-    router: NextRouter
-}
-
-const HomeLink: React.FC<HomeLinkProps> = ({ router }) => {
+export function HomeLink() {
     const { setTheme, theme } = useTheme()
 
-    const handleButtonClick = () => {
-        router.push("/")
-    }
-
     return (
-        <button onClick={handleButtonClick} className="border rounded-md w-6 h-6 flex items-center justify-center">
-            <span className="sr-only">Go Home</span>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="w-4 h-4" viewBox="0 0 20 20">
-                <path
-                    fillRule="evenodd"
-                    d="M10 1.586l8 8V20a1 1 0 01-1 1h-4a1 1 0 01-1-1v-5H8v5a1 1 0 01-1 1H3a1 1 0 01-1-1V9.586l8-8zm2 .414a1 1 0 00-2 0V3.879l2-.707v-.172z"
-                    clipRule="evenodd"
-                />
-            </svg>
+        <button
+            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+            className="border rounded-md w-6 h-6 flex items-center justify-center"
+        >
+            <span className="sr-only">Toggle mode</span>
+            {theme !== "dark" ? (
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" className="w-4 h-4">
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"
+                    ></path>
+                </svg>
+            ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" className="w-4 h-4">
+                    <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"
+                    ></path>
+                </svg>
+            )}
         </button>
     )
 }
-
-export default withRouter(HomeLink)

@@ -11,6 +11,9 @@ const tagColors: {
     Pinecone: "#fca5a5",
     LangChain: "#c4b5fd",
     MongoDB: "#6ee7b7",
+    JavaScript: "#f7df1e",
+    Node: "#6ee7b7",
+    APIs: "#fca5a5",
 }
 
 export default function Home() {

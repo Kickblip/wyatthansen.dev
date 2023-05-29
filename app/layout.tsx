@@ -4,7 +4,7 @@ import { Inter } from "next/font/google"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Analytics } from "@/components/analytics"
 import { ModeToggle } from "@/components/mode-toggle"
-import HomeLink from "@/components/home-link"
+import { HomeLink } from "@/components/home-link"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -28,6 +28,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                         <header>
                             <div className="flex items-center justify-between">
                                 <ModeToggle />
+                                <HomeLink />
                                 <nav className="ml-auto text-sm font-medium space-x-6">
                                     <Link href="/">Home</Link>
                                 </nav>
