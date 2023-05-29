@@ -27,11 +27,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
                     <div className="max-w-4xl mx-auto py-10 px-4">
                         <header>
                             <div className="flex items-center justify-between">
-                                <ModeToggle />
                                 <HomeLink />
-                                <nav className="ml-auto text-sm font-medium space-x-6">
-                                    <Link href="/">Home</Link>
-                                </nav>
+                                <ModeToggle />
                             </div>
                         </header>
                         <main className="w-full">{children}</main>

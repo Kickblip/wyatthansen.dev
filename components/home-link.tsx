@@ -1,16 +1,14 @@
 "use client"
 
 import { useTheme } from "next-themes"
+import Link from "next/link"
 
 export function HomeLink() {
-    const { setTheme, theme } = useTheme()
+    const { theme } = useTheme()
 
     return (
-        <button
-            onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-            className="border rounded-md w-6 h-6 flex items-center justify-center"
-        >
-            <span className="sr-only">Toggle mode</span>
+        <Link href="/" className="border rounded-md w-6 h-6 flex items-center justify-center">
+            <span className="sr-only">Go to Home</span>
             {theme !== "dark" ? (
                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" className="w-4 h-4">
                     <path
@@ -28,6 +26,6 @@ export function HomeLink() {
                     ></path>
                 </svg>
             )}
-        </button>
+        </Link>
     )
 }
