@@ -76,6 +76,7 @@ export default async function PostPage({ params }: PostProps) {
                     .map((post) => (
                         <article key={post._id} className="flex items-start space-x-8 w-full">
                             <div className="aspect-w-16 aspect-h-9 w-[40%] overflow-hidden">
+                                {/* eslint-disable-next-line */}
                                 <img className="object-cover rounded w-full h-full" src={post.cover} alt={post.title} />
                             </div>
                             <div className="w-[60%]">
