@@ -1,4 +1,4 @@
-# Next.js + Contentlayer
+# Next.js + Contentlayer + TypeScript
 
 Cloned from Vercel's Next.js 13, Contentlayer template. Modified by Kickblip.
 
