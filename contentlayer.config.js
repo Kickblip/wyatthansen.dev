@@ -48,6 +48,10 @@ export const Post = defineDocumentType(() => ({
             type: "string",
             required: true,
         },
+        tags: {
+            type: "json",
+            required: true,
+        },
     },
     computedFields,
 }))
