@@ -52,6 +52,12 @@ export const Post = defineDocumentType(() => ({
             type: "json",
             required: true,
         },
+        github: {
+            type: "string",
+        },
+        live: {
+            type: "string",
+        },
     },
     computedFields,
 }))
