@@ -22,11 +22,11 @@ export function SidebarMenu({ github, live }: SidebarMenuProps) {
                     } hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out block mb-2`}
                 >
                     <Image
-                        src={github?.href ? "/icons/github-dark.png" : "/icons/none-dark.png"}
+                        src={github?.href ? "/icons/github.png" : "/icons/none.png"}
                         alt="Github Icon"
                         width={20}
                         height={20}
-                        className="mr-2"
+                        className="mr-2 invert dark:invert-0"
                     />
                     {github?.text ?? "No Link Provided"}
                 </Link>
@@ -37,11 +37,11 @@ export function SidebarMenu({ github, live }: SidebarMenuProps) {
                     } hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition duration-150 ease-in-out block mb-2`}
                 >
                     <Image
-                        src={live?.href ? "/icons/external-dark.png" : "/icons/none-dark.png"}
+                        src={live?.href ? "/icons/external.png" : "/icons/none.png"}
                         alt="Live Icon"
                         width={20}
                         height={20}
-                        className="mr-2"
+                        className="mr-2 invert dark:invert-0"
                     />
                     {live?.text ?? "No Link Provided"}
                 </Link>
