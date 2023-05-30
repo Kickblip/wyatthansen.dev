@@ -4,14 +4,14 @@ import { tagColors } from "../../tags"
 
 import { Metadata } from "next"
 import Link from "next/link"
+import Image from "next/image"
 import { Mdx } from "@/components/mdx-components"
 import { SidebarMenu } from "@/components/sidebar"
 
 /*
-re order the posts
 add a home button at the bottom of the page or make the top nav sticky
-add created by footer to the bottom of the page
 make it so you can click posts from the entire div not just the title
+reactive UI on mobile
 */
 
 interface PostProps {
@@ -115,6 +115,19 @@ export default async function PostPage({ params }: PostProps) {
                             </div>
                         </article>
                     ))}
+                <Link
+                    href="/"
+                    className="inline-flex items-center no-underline hover:underline text-black dark:text-white font-medium"
+                >
+                    <Image
+                        src="/icons/left-arrow.png"
+                        alt="Back Home"
+                        width={14}
+                        height={14}
+                        className="mr-2 invert-0 dark:invert"
+                    />
+                    <p>All Posts</p>
+                </Link>
             </article>
             <SidebarMenu
                 github={post.github ? { href: post.github, text: "Github" } : undefined}
