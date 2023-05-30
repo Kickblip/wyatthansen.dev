@@ -17,7 +17,7 @@ export function SidebarMenu({ github, live }: SidebarMenuProps) {
             <div className="space-y-4">
                 <Link
                     href={github?.href ?? "#"}
-                    target={github?.href ? "_blank" : "_self"}
+                    target="_blank"
                     className={`inline-flex items-center px-4 py-2 border border-black dark:border-white text-sm leading-5 font-medium rounded-md text-black dark:text-white ${
                         github?.href ? "bg-transparent" : "bg-transparent border-[#808080] pointer-events-none"
                     } dark:hover:bg-[#2e2e2e] hover:bg-[#ebebeb]`}
@@ -33,7 +33,7 @@ export function SidebarMenu({ github, live }: SidebarMenuProps) {
                 </Link>
                 <Link
                     href={live?.href ?? "#"}
-                    target={live?.href ? "_blank" : "_self"}
+                    target="_blank"
                     className={`inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white dark:text-black ${
                         live?.href ? "bg-black dark:bg-white" : "bg-gray-800 dark:bg-gray-300 pointer-events-none"
                     } hover:bg-[#2e2e2e] dark:hover:bg-[#ebebeb]`}

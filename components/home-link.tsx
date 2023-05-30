@@ -7,10 +7,10 @@ export function HomeLink() {
     const { theme } = useTheme()
 
     return (
-        <Link href="/" className="border rounded-md w-6 h-6 flex items-center justify-center">
+        <Link href="/" className="border rounded-md w-8 h-8 flex items-center justify-center">
             <span className="sr-only">Go to Home</span>
             {theme !== "dark" ? (
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" className="w-4 h-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" className="w-5 h-5">
                     <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -18,7 +18,7 @@ export function HomeLink() {
                     ></path>
                 </svg>
             ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" className="w-4 h-4">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 16" className="w-5 h-5">
                     <path
                         strokeLinecap="round"
                         strokeLinejoin="round"

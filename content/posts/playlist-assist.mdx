@@ -1,8 +1,57 @@
 ---
 title: Playlist Assist - Spotify Auto-DJ
 description: Spotify companion app that creates beat-matched transitions within your Spotify playlist.  Remotely controls your Spotify account from a website.
-date: "2023-01-02"
+date: "2023-04-11"
 cover: "/covers/playlist-assist.png"
 tags: { "JavaScript": true, "Node": true, "APIs": true }
 github: "https://github.com/Kickblip/playlist-assist"
+live: "https://youtu.be/At7JKpYVbnc"
 ---
+
+# Introduction
+
+There's nothing quite like a well-curated Spotify playlist, but no matter how carefully we arrange songs, transitions between tracks can often be abrupt, disrupting the flow of our listening experience. Playlist-Assist, is a webapp I designed over the course of a few weeks for my school’s “Senior Independent Project” program near the end of our school year.
+
+The concept is simple: Playlist-Assist connects to your Spotify account and collects data on the songs you’re listening to. It uses this data to reorganize your playlist and pick out timestamps from your currently playing song and next song where it thinks a transition/segue would sound smooth.
+
+In this blog post, I'll dive deeper into the technical challenges I've faced during the development of Playlist-Assist, as well as the solutions I've implemented so far.
+
+# Week 1: User Interface & Timer System
+
+The initial challenge was to provide an interface where users could visualize their upcoming songs. Since Playlist-Assist reshuffles the playlist during the ingestion phase, users should have a way of seeing their reshuffled playlist queue. The solution was a simple stack of info cards that the user can scroll through. Each card presents information like the song title, artist name, and an image of the album cover. All this information is readily available through the Spotify API.
+
+Another critical aspect was timing. To smoothly transition between songs, Playlist-Assist needs to accurately measure the user's position within the current song. With the lack of support for webhooks and long-polling from the Spotify API, we had to rely on a local timer. This timer synchronizes with the Spotify player using periodic API calls, maintaining its accuracy with sub-millisecond precision. To account for natural drift that all computer programs experience, the timer adjusts itself on every iteration, creating a self-adjusting timer.
+
+# Week 2: Pre-processing & Beat-Finding
+
+To ensure the smoothness of transitions, songs in the playlist need to be pre-processed, a phase also known as the ingestion phase. The objective here is to rearrange the playlist so that similar-sounding tracks are arranged sequentially, creating a 'flow'. Moreover, the user's current song always remains in the first position, and the other songs are organized around it.
+
+This rearrangement process begins by converting track information from Spotify into vectors, preserving track IDs for later retrieval. Rather than using clustering algorithms, which proved to have limitations, we decided on an iterative comparison approach. Starting with the currently playing song, we compare it with all the other vectors in the queue, selecting the best match to follow the first song. This process is repeated recursively for the newly shuffled songs until the playlist is fully organized, ensuring an optimal flow.
+
+For comparing vectors, I used cosine similarity. While it's less accurate for lower-dimensional vectors, it was a norm I was familiar with. Future updates might involve experimenting with other norms for more accurate comparison.
+
+# Week 3: Refactoring & User Experience Enhancements
+
+With the project growing, it became necessary to refactor some parts of the codebase for better readability and error handling. One such change was standardizing the variable naming conventions. I chose "snake_case" over "camelCase" primarily because it seemed more readable.
+
+Additionally, I created a logging window for users to get updates as the app works on their playlists. Writing updates is as simple as using: terminal.log('Queue shuffled successfully!'). Furthermore, a feature was implemented that allowed users to pause the reshuffling process and continue later. This was especially useful for larger playlists where reshuffling could take some time.
+
+# Week 4: Beat Matching & Transitioning
+
+Now, this was perhaps the most exciting part of the project – beat matching and transitioning. We had two tasks here: first, identifying the beats in the songs; and second, finding identical beat-pairs for smooth transitions.
+
+For beat detection, I used a Python library called 'librosa.' It provides functionality to identify the onset of beats in a given audio file. However, librosa's beat tracker requires the actual audio file, not just the track information available through Spotify's API. For this reason, I implemented a workaround: Playlist-Assist suggests beat match points to the user who can then manually input these points. In the future, we could use a service like YouTube's API to fetch the actual audio file, but this would involve navigating the murky waters of copyright law.
+
+To find identical beat-pairs, I used cross-correlation, a mathematical operation that essentially slides two signals over each other and compares the overlaps. The higher the cross-correlation value, the closer the beats in the two songs are to each other. Once an identical beat-pair is found, Playlist-Assist takes note of the exact point in the second song where the beat occurs and queues the song at this exact moment when the first song reaches the corresponding beat.
+
+# Week 5: Improvements & Future Plans
+
+The final week involved refining the application and planning for future improvements. One enhancement was allowing users to select the reshuffling intensity - how closely the next song should match the current one. This feature gives users some degree of control over the 'flow' of their playlist.
+
+In terms of future plans, one exciting idea is to integrate machine learning for better beat-pair detection. Currently, the system requires the user to input beat points manually. A machine learning model could potentially learn to identify these points automatically.
+
+# Conclusion
+
+Overall, developing Playlist-Assist was an amazing learning experience, combining my love for music with coding. It's incredibly satisfying to see a shuffled playlist flow seamlessly from one song to the next. And the best part is, this project has so much more potential. As with any project, there are improvements to be made, and I'm excited about the direction Playlist-Assist is heading.
+
+Thank you for joining me on this development journey. I hope you found it interesting, and I look forward to sharing more updates on Playlist-Assist soon!

@@ -7,6 +7,13 @@ import Link from "next/link"
 import { Mdx } from "@/components/mdx-components"
 import { SidebarMenu } from "@/components/sidebar"
 
+/*
+re order the posts
+add a home button at the bottom of the page or make the top nav sticky
+add created by footer to the bottom of the page
+make it so you can click posts from the entire div not just the title
+*/
+
 interface PostProps {
     params: {
         slug: string[]
@@ -67,8 +74,10 @@ export default async function PostPage({ params }: PostProps) {
 
                 <h1 className="mb-2">{post.title}</h1>
                 {post.description && <p className="text-xl mt-0 text-slate-700 dark:text-slate-200">{post.description}</p>}
+
                 <hr className="my-10" />
                 <Mdx code={post.body.code} />
+                <hr className="my-10" />
 
                 {allPosts
                     .filter((additionalPost) => additionalPost._id !== post._id)
@@ -109,7 +118,7 @@ export default async function PostPage({ params }: PostProps) {
             </article>
             <SidebarMenu
                 github={post.github ? { href: post.github, text: "Github" } : undefined}
-                live={post.live ? { href: post.live, text: "Live" } : undefined}
+                live={post.live ? { href: post.live, text: "View" } : undefined}
             />
         </div>
     )
