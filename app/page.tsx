@@ -10,15 +10,18 @@ export default function Home() {
                 title="Hi, I'm Wyatt"
                 description="I like machine learning and algorithms.  I'm currently a senior in high school.  I started teaching myself coding in October 2022.  Here's some of the projects I've worked on..."
             />
-            <hr className="my-4" />
+            <hr className="md:my-4 my-8" />
             {allPosts.map((post) => (
-                <article key={post._id} className="flex items-start space-x-8 w-full">
-                    <div className="aspect-w-16 aspect-h-9 w-[40%] overflow-hidden">
+                <article
+                    key={post._id}
+                    className="flex flex-col md:flex-row items-center md:items-start mb-6 md:mb-0 md:space-x-8 w-full text-center md:text-left"
+                >
+                    <div className="aspect-w-16 aspect-h-9 w-full md:w-[40%] overflow-hidden">
                         {/* eslint-disable-next-line */}
                         <img className="object-cover rounded w-full h-full" src={post.cover} alt={post.title} />
                     </div>
-                    <div className="w-[60%]">
-                        <div className="p-0 mt-10">
+                    <div className="w-full md:w-[60%]">
+                        <div className="p-0 md:mt-10">
                             {Object.entries(post.tags).map(([tag, active]) => (
                                 <span
                                     key={tag}
@@ -30,7 +33,7 @@ export default function Home() {
                             ))}
                         </div>
                         <Link href={post.slug} className="no-underline">
-                            <h2 className="text-2xl font-bold hover:underline cursor-pointe mb-1 mt-2">{post.title}</h2>
+                            <h2 className="text-2xl font-bold hover:underline cursor-pointer mb-1 mt-2">{post.title}</h2>
                         </Link>
                         <div className="text-sm dark:text-[#9c9c9c] text-[#737478]">
                             {post.description && <p>{post.description}</p>}

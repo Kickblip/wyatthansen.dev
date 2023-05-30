@@ -6,19 +6,19 @@ interface LinkProp {
     text: string
 }
 
-interface SidebarMenuProps {
+interface MobileMenuProps {
     github?: LinkProp
     live?: LinkProp
 }
 
-export function SidebarMenu({ github, live }: SidebarMenuProps) {
+export function MobileMenu({ github, live }: MobileMenuProps) {
     return (
-        <div className="w-[25%] h-[25%] p-4 flex-col mt-20 pl-8 sticky top-12 hidden md:block">
-            <div className="space-y-4">
+        <div className="w-full flex-col block md:hidden">
+            <div className="space-x-4">
                 <Link
                     href={github?.href ?? "#"}
                     target="_blank"
-                    className={`inline-flex items-center px-4 py-2 border border-black dark:border-white text-sm leading-5 font-medium rounded-md text-black dark:text-white ${
+                    className={`inline-flex items-center px-4 border border-black dark:border-white text-sm leading-5 font-medium rounded-md text-black dark:text-white ${
                         github?.href ? "bg-transparent" : "bg-transparent border-[#808080] pointer-events-none"
                     } dark:hover:bg-[#2e2e2e] hover:bg-[#ebebeb]`}
                 >
@@ -34,7 +34,7 @@ export function SidebarMenu({ github, live }: SidebarMenuProps) {
                 <Link
                     href={live?.href ?? "#"}
                     target="_blank"
-                    className={`inline-flex items-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-white dark:text-black ${
+                    className={`inline-flex items-center px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white dark:text-black ${
                         live?.href ? "bg-black dark:bg-white" : "bg-gray-800 dark:bg-gray-300 pointer-events-none"
                     } hover:bg-[#2e2e2e] dark:hover:bg-[#ebebeb]`}
                 >

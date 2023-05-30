@@ -7,9 +7,9 @@ import Link from "next/link"
 import Image from "next/image"
 import { Mdx } from "@/components/mdx-components"
 import { SidebarMenu } from "@/components/sidebar"
+import { MobileMenu } from "@/components/mobile-menu"
 
 /*
-add a home button at the bottom of the page or make the top nav sticky
 make it so you can click posts from the entire div not just the title
 reactive UI on mobile
 */
@@ -58,8 +58,8 @@ export default async function PostPage({ params }: PostProps) {
     }
 
     return (
-        <div className="flex">
-            <article className="py-6 prose dark:prose-invert mt-10">
+        <div className="flex flex-col md:flex-row w-full">
+            <article className="py-6 prose dark:prose-invert mt-10 w-full">
                 <div className="mb-5">
                     {Object.entries(post.tags).map(([tag, active]) => (
                         <span
@@ -74,6 +74,11 @@ export default async function PostPage({ params }: PostProps) {
 
                 <h1 className="mb-2">{post.title}</h1>
                 {post.description && <p className="text-xl mt-0 text-slate-700 dark:text-slate-200">{post.description}</p>}
+
+                <MobileMenu
+                    github={post.github ? { href: post.github, text: "Github" } : undefined}
+                    live={post.live ? { href: post.live, text: "View" } : undefined}
+                />
 
                 <hr className="my-10" />
                 <Mdx code={post.body.code} />
