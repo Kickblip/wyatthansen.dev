@@ -88,13 +88,16 @@ export default async function PostPage({ params }: PostProps) {
                     .filter((additionalPost) => additionalPost._id !== post._id)
                     .slice(0, 3)
                     .map((post) => (
-                        <article key={post._id} className="flex items-start space-x-8 w-full">
-                            <div className="aspect-w-16 aspect-h-9 w-[40%] overflow-hidden">
+                        <article
+                            key={post._id}
+                            className="flex flex-col md:flex-row items-center md:items-start md:space-x-8 w-full text-center md:text-left mb-6 md:mb-0"
+                        >
+                            <div className="aspect-w-16 aspect-h-9 md:w-[40%] w-full overflow-hidden">
                                 {/* eslint-disable-next-line */}
                                 <img className="object-cover rounded w-full h-full" src={post.cover} alt={post.title} />
                             </div>
-                            <div className="w-[60%]">
-                                <div className="p-0 mt-6">
+                            <div className="w-full md:w-[60%]">
+                                <div className="p-0 md:mt-6">
                                     {Object.entries(post.tags).map(([tag, active]) => (
                                         <span
                                             key={tag}
