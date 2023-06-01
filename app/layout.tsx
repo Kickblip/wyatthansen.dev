@@ -10,7 +10,7 @@ import { HomeLink } from "@/components/home-link"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-    title: "Hi, I'm Wyatt",
+    title: "Wyatt's Portfolio",
     description:
         "I like machine learning and algorithms. I'm currently a senior in high school. I started teaching myself coding in October 2022. Here's some of the projects I've worked on...",
     author: "Wyatt",
