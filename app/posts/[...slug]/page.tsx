@@ -126,13 +126,17 @@ export default async function PostPage({ params }: PostProps) {
                     href="/"
                     className="inline-flex items-center no-underline hover:underline text-black dark:text-white font-medium"
                 >
-                    <Image
-                        src="/icons/left-arrow.png"
-                        alt="Back Home"
-                        width={14}
-                        height={14}
-                        className="mr-2 invert-0 dark:invert"
-                    />
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="w-6 h-6"
+                    >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                    </svg>
+
                     <p>All Posts</p>
                 </Link>
             </article>
