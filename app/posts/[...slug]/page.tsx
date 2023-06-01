@@ -11,7 +11,6 @@ import { MobileMenu } from "@/components/mobile-menu"
 
 /*
 make it so you can click posts from the entire div not just the title
-reactive UI on mobile
 */
 
 interface PostProps {

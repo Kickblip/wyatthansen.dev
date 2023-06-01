@@ -10,8 +10,16 @@ import { HomeLink } from "@/components/home-link"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
-    title: "Wyatt's Projects",
-    description: "My Portoflio Site",
+    title: "Hi, I'm Wyatt",
+    description:
+        "I like machine learning and algorithms. I'm currently a senior in high school. I started teaching myself coding in October 2022. Here's some of the projects I've worked on...",
+    author: "Wyatt",
+    keywords: ["TypeScript", "Projects", "Portfolio", "JavaScript", "React", "Coding"],
+    locale: "en_US",
+    siteName: "Wyatt's Portfolio",
+    image: "/metacover.png",
+    url: "www.wchprojects.com/",
+    type: "website",
 }
 
 interface RootLayoutProps {
