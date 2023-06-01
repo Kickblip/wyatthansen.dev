@@ -16,10 +16,10 @@ export default function Home() {
                     key={post._id}
                     className="flex flex-col md:flex-row items-center md:items-start mb-6 md:mb-0 md:space-x-8 w-full text-center md:text-left"
                 >
-                    <div className="aspect-w-16 aspect-h-9 w-full md:w-[40%] overflow-hidden">
+                    <Link href={post.slug} className="aspect-w-16 aspect-h-9 w-full md:w-[40%] overflow-hidden">
                         {/* eslint-disable-next-line */}
                         <img className="object-cover rounded w-full h-full" src={post.cover} alt={post.title} />
-                    </div>
+                    </Link>
                     <div className="w-full md:w-[60%]">
                         <div className="p-0 md:mt-10">
                             {Object.entries(post.tags).map(([tag, active]) => (

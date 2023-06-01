@@ -91,10 +91,10 @@ export default async function PostPage({ params }: PostProps) {
                             key={post._id}
                             className="flex flex-col md:flex-row items-center md:items-start md:space-x-8 w-full text-center md:text-left mb-6 md:mb-0"
                         >
-                            <div className="aspect-w-16 aspect-h-9 md:w-[40%] w-full overflow-hidden">
+                            <Link href={post.slug} className="aspect-w-16 aspect-h-9 md:w-[40%] w-full overflow-hidden">
                                 {/* eslint-disable-next-line */}
                                 <img className="object-cover rounded w-full h-full" src={post.cover} alt={post.title} />
-                            </div>
+                            </Link>
                             <div className="w-full md:w-[60%]">
                                 <div className="p-0 md:mt-6">
                                     {Object.entries(post.tags).map(([tag, active]) => (
