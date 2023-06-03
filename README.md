@@ -13,12 +13,17 @@ Bootstrapped with Vercel's Next.js 13, Contentlayer [template](https://next-cont
 
 
 ## Directory Structure
-app/*: I'm using the new next.js app directory structure.  This directory contains the main app.
-components/*: All custom components are stored in this directory.
-content/*: This directory contains all the Contentlayer contents.
-public/*: This directory contains all the static assets of the website.
-public/covers/*: This is where the thumbnails for posts are kept.  They are matched to the post title
-public/images/*: The somewhat confusingly named `images` directory is for images within the posts
+`app/*`: I'm using the new next.js app directory structure.  This directory contains the main app.
+
+`components/*`: All custom components are stored in this directory.
+
+`content/*`: This directory contains all the Contentlayer contents.
+
+`public/*`: This directory contains all the static assets of the website.
+
+`public/covers/*`: This is where the thumbnails for posts are kept.  They are matched to the post title
+
+`public/images/*`: The somewhat confusingly named `images` directory is for images within the posts
 
 **Bonus:** use `/app/page.tsx` to edit the homepage and use `/app/posts/[...slug]/page.tsx` to edit a post page
 
