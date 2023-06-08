@@ -52,7 +52,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
                                     className="mx-2 invert-0 dark:invert"
                                 />
                                 {" by "}
-                                <Link href="https://github.com/Kickblip" target="_blank" rel="noopener noreferrer">
+                                <Link
+                                    href="https://github.com/Kickblip/wchprojects.com"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
                                     <span className="underline font-medium">Kickblip</span>
                                 </Link>
                             </div>
