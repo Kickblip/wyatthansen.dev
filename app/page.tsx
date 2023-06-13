@@ -8,7 +8,7 @@ export default function Home() {
         <div className="prose dark:prose-invert w-full max-w-none">
             <HomeIntro
                 title="Hi, I'm Wyatt"
-                description="I like machine learning and algorithms.  I'm currently a senior in high school.  I started teaching myself coding in October 2022.  Here's some of the projects I've worked on..."
+                description="I like machine learning and algorithms.  I'm currently a freshman in college.  I started teaching myself coding in October 2022.  Here's some of the projects I've worked on..."
             />
             <hr className="md:my-4 my-8" />
             {allPosts.map((post) => (
