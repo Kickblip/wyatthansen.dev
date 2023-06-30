@@ -8,8 +8,78 @@ github: "https://github.com/Kickblip/polyhedron-rendering"
 live: "https://dulcet-froyo-c497b6.netlify.app/"
 ---
 
-Making cool stuff is really cool and hopefully I'll have a chance to come back to this entry and talk more about all the cool stuff and work I put into this project. I'm not sure what else to say here so I'm just going to keep typing until I feel like I've written enough words to make this look like a decently sized paragraph.
+# Background
 
-Let's add a closing paragraph here so things end with a decently sized block of text. I can't explain why I want things to end that way but I have to assume it's because I think things will look weird or unbalanced if there is a heading too close to the end of the document.
+I built the vast majority of this project in a bored afternoon at school. I was originally inspired by a video of an ascii donut spinning
+around. The concept was strangely fascinating for me - I loved the retro and minimalistic look of the final product, so I knew I wanted to
+make spinning ascii shapes.
 
-What I've written here is probably long enough, but adding this final sentence can't hurt.
+<iframe
+    src="https://www.youtube.com/embed/DEqXNfs_HhY"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    className="my-6 w-full h-[225px] md:w-[640px] md:h-[360px]"
+></iframe>
+
+I was also wanting to try out ThreeJS, a JavaScript library designed to create and display 3D graphics on the web. Using ThreeJS meant that
+I didn't have to do as much math on the perspective/rendering side of the project, and I could instead focus on creating the polyhedra
+geometries.
+
+# Calculating Polyhedra
+
+The first step in creating the polyhedra was to calculate the vertices and faces of each shape. This data can be found in a [collection of polyhedra models](http://www.georgehart.com/virtual-polyhedra/vp.html)
+made by George Hart. The data is stored in objects:
+
+```javascript
+const POLYHEDRA = {
+    Tetrahedron: {
+        name: "Tetrahedron",
+        category: ["Platonic Solid"],
+        vertex: [
+            [0, 0, 1.732051],
+            [1.632993, 0, -0.5773503],
+            [-0.8164966, 1.414214, -0.5773503],
+            [-0.8164966, -1.414214, -0.5773503],
+        ],
+        edge: [
+            [0, 1],
+            [0, 2],
+            [0, 3],
+            [1, 2],
+            [1, 3],
+            [2, 3],
+        ],
+        face: [
+            [0, 1, 2],
+            [0, 2, 3],
+            [0, 3, 1],
+            [1, 3, 2],
+        ],
+    },
+    /* ... */
+}
+```
+
+Each polyhedron has a name, category, vertices, edges, and faces. The vertices are stored as an array of arrays, where each sub-array is the coordinates of a vertex.
+The edges are stored as an array of arrays, where each sub-array is the indices of the vertices that make up the edge. The faces are stored as an array of arrays,
+where each sub-array is the indices of the vertices that make up the face. For this project, I'm really only using the vertices and faces because ThreeJS only needs to
+construct the faces of the polyhedron.
+
+# Ascii Filter
+
+I originally wanted to do ascii rendering directly on the polyhedron geometry, but this method was somewhat incompatible with ThreeJS.
+Instead, I decided to use a filter to render the ascii version of the polyhedron. The filter adds a DOM element on top of the canvas that holds text characters.
+The ascii characters inside this big element are chosen based on the luminosity (brightness) of the pixels underneath.
+
+<div className="flex">
+    <div className="w-1/2">![before](/images/polyhedra/before.png)</div>
+    <div className="w-1/2">![after](/images/polyhedra/after.png)</div>
+</div>
+
+# Keeping it Simple
+
+I knew I wanted to include multiple polyhedra in the project, but I also wanted to keep the UI as minimalistic as possible.
+I decided on a slider at the top of the screen that lets the user scroll through the different shapes that are available.
+I used this instead of a dropdown menu because most people don't really know what polyhedra are, so they wouldn't know what
+to look for in a dropdown menu. The slider is also more interactive and adds a level of mystery/discovery to the project.
+
+![UI](/images/polyhedra/UI.png)
