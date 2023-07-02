@@ -7,8 +7,97 @@ tags: { "JavaScript": true, "APIs": true, "Puppeteer": true, "AWS": true, "FFmpe
 github: "https://github.com/IP-2023/reddit-story-tiktok-bot"
 ---
 
-Making cool stuff is really cool and hopefully I'll have a chance to come back to this entry and talk more about all the cool stuff and work I put into this project. I'm not sure what else to say here so I'm just going to keep typing until I feel like I've written enough words to make this look like a decently sized paragraph.
+# Who would watch these?
 
-Let's add a closing paragraph here so things end with a decently sized block of text. I can't explain why I want things to end that way but I have to assume it's because I think things will look weird or unbalanced if there is a heading too close to the end of the document.
+That's the question my mom asked me when I showed her the first video I generated. Since I deleted TikTok, I don't know how
+relevant this bot is anymore, but at the time of making it I was seeing a lot of the same type of video on my feed.
 
-What I've written here is probably long enough, but adding this final sentence can't hurt.
+<iframe
+    src="https://www.youtube.com/embed/Y6xPVZGumCE"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    className="my-6 w-full h-[225px] md:w-[640px] md:h-[360px]"
+></iframe>
+
+These videos are usually a screenshot of a reddit post, with a voiceover of the post being read out loud. The background is usually a video of a video game, or someone watching, or something else
+that is just a little bit interesting. It's a formula that works, and I wanted to see if I could automate it.
+
+# Getting Screenshots
+
+## Reddit API
+
+The first component of this project is getting screenshots of the reddit posts. Before you can start screenshotting though, you'll need to find relevant
+posts to use. I used the reddit API to get the top posts on a given time frame (day/week/month) from a target subreddit.
+
+```javascript
+const response = await fetch(endpoint)
+const data = await response.json()
+const topPosts = data.data.children.map((post) => post.data)
+
+const postPromises = topPosts.map(async (post) => {
+    const commentsEndpoint = `https://www.reddit.com/r/${subreddit}/comments/${post.id}.json`
+    const commentsResponse = await fetch(commentsEndpoint)
+    const commentsData = await commentsResponse.json()
+    const comments = commentsData[1].data.children.map((comment) => comment.data)
+    return { post, comments }
+})
+
+const results = await Promise.all(postPromises)
+```
+
+This will give you an array of posts, each with an array of comments. Then, it's just a matter of picking a post. I chose to pick the first post every time, but you could easily randomize this.
+
+```javascript
+const targetURL = `https://www.reddit.com${results[0].post.permalink}`
+const targetComment1 = `https://www.reddit.com${results[0].comments[0].permalink}`
+const targetComment2 = `https://www.reddit.com${results[0].comments[1].permalink}`
+const targetComment3 = `https://www.reddit.com${results[0].comments[2].permalink}`
+```
+
+## Puppeteer
+
+Now that we have hyperlinks to the post and some relevant comments, we can start screenshotting. I used Puppeteer to do this, which is a headless browser that can be controlled with JavaScript.  
+First, I remove elements that will get in the way of the screenshot, like the prompt to download the reddit app, by filtering their tag.
+
+```javascript
+const ad = document.getElementsByTagName("shreddit-comments-page-ad")
+if (ad.length) {
+    console.log("Removing shreddit-comments-page-ad elements")
+    for (const blocker of ad) {
+        blocker.remove()
+    }
+}
+```
+
+You can find troublesome elements by watching the Puppeteer browser in non-headless mode, and then using the dev tools to find the element's tag.
+
+Next, I take the actual screenshot by looking for a post element or comment element, and then taking a screenshot of that element.
+
+```javascript
+if (urls.indexOf(url) === 0) {
+    // if the first url, take a screenshot of the post
+    const target = document.getElementsByTagName("shreddit-post")[0].getBoundingClientRect()
+    return {
+        x: target.x || 0,
+        y: target.y || 60,
+        width: target.width || 375,
+        height: target.height || 210,
+    }
+} else {
+    // after the first url, take a screenshot of the comment using its body dimensions
+    const body = document.getElementById("-post-rtjson-content").getBoundingClientRect()
+    return {
+        x: 0,
+        y: 435,
+        width: 375,
+        height: body.height + 85 || 300,
+    }
+}
+```
+
+The most important part of the screenshot is to adjust the dimensions of the screenshot so they fit the content nicely. You can use the height of the post/comment DOM element itself
+to ensure that the screenshot is capturing all the content. As programmers I feel that we often take pride in the smallest details that users take for granted, and this is certainly one of those details.
+
+<div className="flex">
+    <div className="w-1/2 p-0.5">![before](/images/tiktok-generator/post.png)</div>
+    <div className="w-1/2 p-0.5">![after](/images/tiktok-generator/comment-2.png)</div>
+</div>
