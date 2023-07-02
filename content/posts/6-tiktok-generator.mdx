@@ -101,3 +101,99 @@ to ensure that the screenshot is capturing all the content. As programmers I fee
     <div className="w-1/2 p-0.5">![before](/images/tiktok-generator/post.png)</div>
     <div className="w-1/2 p-0.5">![after](/images/tiktok-generator/comment-2.png)</div>
 </div>
+
+# Creating the Voiceover
+
+## AWS Polly
+
+Now that we have the screenshot, we can create the voiceover. This part is really easy. I used AWS Polly to do this, which is Amazon's text-to-speech service. The API is pretty simple, you just pass in the text you want to be read, and it returns an audio stream
+that can written to a file.
+
+```javascript
+polly.synthesizeSpeech(params, (err, data) => {
+    if (err) {
+        console.error(err)
+    } else {
+        // // Write the TTS audio stream to a file
+        fs.writeFileSync(`tts-${i}.mp3`, data.AudioStream, "binary")
+        console.log(`TTS audio file written to tts-${i}.mp3`)
+    }
+})
+```
+
+# Finding Background Footage
+
+## YouTube API
+
+Now that we have the screenshot and the voiceover, we need to find some background footage. I used the YouTube API to do this, which is a REST API that allows you to search for videos.
+
+```javascript
+const searchQuery = req.query.search_query
+
+youtube.search.list({
+    part: "snippet",
+    q: searchQuery,
+    maxResults: 25, //max 50
+    type: "video",
+    // videoDuration: "short"
+})
+```
+
+The most important part of this is the `videoDuration` parameter. I found that the best videos to use as background footage were short videos, so I set the `videoDuration` to `short`.  
+This will return a list of links to videos that are less than 4 minutes long, which we can then use to download a background video.
+
+```javascript
+youtubedl(`https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`, {
+    noCheckCertificates: true,
+    noWarnings: true,
+    preferFreeFormats: true,
+    addHeader: ["referer:youtube.com", "user-agent:googlebot"],
+})
+```
+
+# Bringing it all Together
+
+## FFmpeg
+
+Now that we have all the components, we can bring them together. FFmpeg is a popular command line tool that can be used to edit videos. I used a JavaScript wrapper for FFmpeg called fluent-ffmpeg to
+help me edit my videos directly in JavaScript. I use it by writing a series of commands that will be executed in order.
+
+```javascript
+{
+    filter: 'overlay',
+    options: {
+        x: '(main_w-overlay_w)/2',
+        y: 80,
+        enable: `between(t,${(durations[1] + durations[2] + durations[3])},${(durations[1] + durations[2] + durations[3] + durations[4])})`
+    },
+    inputs: ['overlayed3', 'sc4'],
+    outputs: 'overlayed4'
+},
+// mute the background footage
+{
+    filter: 'volume',
+    options: {
+        // enable: 'between(t,0,20)',
+        volume: 0
+    },
+    inputs: '0:a',
+    outputs: 'muted'
+},
+// trim audio of background video to end at the same time as the last tts audio file
+{
+    filter: 'atrim',
+    options: {
+        duration: `${durations[1] + durations[2] + durations[3] + durations[4]}`
+    },
+    inputs: 'muted',
+    outputs: 'trimmedAudio'
+},
+```
+
+And just like that, we have a video that can be posted on TikTok or any other short-form video platform! Check out my example video below.
+
+<iframe
+    src="https://www.youtube.com/embed/Y6xPVZGumCE"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    className="my-6 w-full h-[225px] md:w-[640px] md:h-[360px]"
+></iframe>
