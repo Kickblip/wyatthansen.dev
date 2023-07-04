@@ -1,13 +1,55 @@
 ---
 title: Browser-Based Multiplayer Game
-description: Making the launch game from my business - a browser-based multiplayer arcade where players can stake each other for real money.
+description: Making the launch game for my business - a browser-based multiplayer arcade where players can stake each other for real money.
 date: "2023-01-02"
 cover: "/covers/mystic-arcade.png"
 tags: { "JavaScript": true, "Phaser3": true, "ColyseusIO": true }
 ---
 
-Making cool stuff is really cool and hopefully I'll have a chance to come back to this entry and talk more about all the cool stuff and work I put into this project. I'm not sure what else to say here so I'm just going to keep typing until I feel like I've written enough words to make this look like a decently sized paragraph.
+# Introduction
 
-Let's add a closing paragraph here so things end with a decently sized block of text. I can't explain why I want things to end that way but I have to assume it's because I think things will look weird or unbalanced if there is a heading too close to the end of the document.
+This project is still ongoing and I will update this page as I progress.
 
-What I've written here is probably long enough, but adding this final sentence can't hurt.
+<iframe
+    src="https://www.youtube.com/embed/u1ylAn8dS_s"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    className="my-6 w-full h-[225px] md:w-[640px] md:h-[360px]"
+></iframe>
+
+My friend and I are building a browser-based multiplayer arcade where players can stake each other for real money. I'm in charge of building the game and the website.  
+This is the game that will accompany the launch of our business.
+
+It is written in JavaScript using the Phaser3 web game framework. This style of game takes a lot of inspiration from .io games like slither.io and agar.io that are characterized
+by continuous game lobbies and easy to learn mechanics. The client itself does very little work and is mostly just a way to display the game's state and send user input to the server.  
+The server is responsible for all the game logic and state management. This is called an "Authoritative Server" architecture and is the most common way to build multiplayer games.
+
+# The Game
+
+The game is relatively simple, it's a top-down shooter with mage characters who can shoot fireballs and dash around the map. The majority of the games development time was spent on the map and the animations.  
+Since I'm trying to spend as little money as possible, all the art is from free asset packs on <a href="https://itch.io/game-assets/free" target="_blank">itch.io</a>.  
+The map has changed drastically since I started this project and will likely continue to change in style and layout until launch. But what made the map difficult wasn't the necessarily the design, it was collisions.
+
+### Collisions
+
+I really wanted a "draw once use everywhere" approach to the map's collision boxes so that I could make changes to an obstacle's hitbox without having to redraw all its instances.  
+Phaser's tilemap support is excellent and very easy, but once you start adding custom collision boxes to tiles it becomes a lot more difficult. I knew I'd have to use MatterJS, Phaser's more advanced physics engine,
+but I still couldn't figure out how to actually add the boxes. Phaser docs aren't very helpful and all the tutorials on YouTube were for simpler collision boxes, so it took me a long to implement this feature.  
+The solution ended up being to draw the collisions in my map editor then add a custom property to each collidable tile that tells Phaser to use the custom collision box instead of the default one.
+
+In other words, I'd draw the tile's collision box, then add a `collides` boolean property, then in my code I'd check if the tile has the "collides" property and if it does I'd use the custom collision box instead of the default one.
+
+```javascript
+obstacleLayer.setCollisionByProperty({ collides: true })
+```
+
+### Animations
+
+Having polished animation has also been an ongoing challenge because while they aren't necessarily required for a beta version of the game, I've been really focused on making them look good.  
+These are running and fighting animations mainly. The combat in this game is very fast paced with lots of dodging, dashing, and cooldown resets. So it's really important that the movement
+animations flow together smoothly and are easy for players to read.
+
+One of my favorite games of all time is Titanfall, a game that popularized the movement shooter genre. In Titanfall (and later in Apex Legends), one of the main focuses of the game's
+movement system was readability. Developers called this the "Brownian Fluid Problem." It's the idea that players' movement should be predictable and quickly readable so that if another player only sees part of
+the animation, they can still predict what the player is doing.
+
+This readability and reliability is exactly what I'm trying to achieve with my animations. Responsive and satisfying gameplay starts with the animations.

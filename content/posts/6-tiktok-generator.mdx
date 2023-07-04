@@ -23,7 +23,7 @@ that is just a little bit interesting. It's a formula that works, and I wanted t
 
 # Getting Screenshots
 
-## Reddit API
+### Reddit API
 
 The first component of this project is getting screenshots of the reddit posts. Before you can start screenshotting though, you'll need to find relevant
 posts to use. I used the reddit API to get the top posts on a given time frame (day/week/month) from a target subreddit.
@@ -53,7 +53,7 @@ const targetComment2 = `https://www.reddit.com${results[0].comments[1].permalink
 const targetComment3 = `https://www.reddit.com${results[0].comments[2].permalink}`
 ```
 
-## Puppeteer
+### Puppeteer
 
 Now that we have hyperlinks to the post and some relevant comments, we can start screenshotting. I used Puppeteer to do this, which is a headless browser that can be controlled with JavaScript.  
 First, I remove elements that will get in the way of the screenshot, like the prompt to download the reddit app, by filtering their tag.
@@ -104,7 +104,7 @@ to ensure that the screenshot is capturing all the content. As programmers I fee
 
 # Creating the Voiceover
 
-## AWS Polly
+### AWS Polly
 
 Now that we have the screenshot, we can create the voiceover. This part is really easy. I used AWS Polly to do this, which is Amazon's text-to-speech service. The API is pretty simple, you just pass in the text you want to be read, and it returns an audio stream
 that can written to a file.
@@ -123,7 +123,7 @@ polly.synthesizeSpeech(params, (err, data) => {
 
 # Finding Background Footage
 
-## YouTube API
+### YouTube API
 
 Now that we have the screenshot and the voiceover, we need to find some background footage. I used the YouTube API to do this, which is a REST API that allows you to search for videos.
 
@@ -153,7 +153,7 @@ youtubedl(`https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`, {
 
 # Bringing it all Together
 
-## FFmpeg
+### FFmpeg
 
 Now that we have all the components, we can bring them together. FFmpeg is a popular command line tool that can be used to edit videos. I used a JavaScript wrapper for FFmpeg called fluent-ffmpeg to
 help me edit my videos directly in JavaScript. I use it by writing a series of commands that will be executed in order.
@@ -190,10 +190,4 @@ help me edit my videos directly in JavaScript. I use it by writing a series of c
 },
 ```
 
-And just like that, we have a video that can be posted on TikTok or any other short-form video platform! Check out my example video below.
-
-<iframe
-    src="https://www.youtube.com/embed/Y6xPVZGumCE"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    className="my-6 w-full h-[225px] md:w-[640px] md:h-[360px]"
-></iframe>
+And just like that, we have a video that can be posted on TikTok or any other short-form video platform!
