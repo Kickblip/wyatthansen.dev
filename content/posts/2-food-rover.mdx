@@ -22,3 +22,35 @@ At my highschool, boarding students used these apps all the time. But they'd sti
 My friend (an electrical engineering major) had very little desire to do anything beyond the hardware. So my main contribution to the project was a human detection system that would allow the robot to avoid obstacles and people. This was my first time working with AI, and I learned a lot about the process of training and deploying models.
 
 ![rover](/images/food-rover/rover.jpeg)
+
+# The Software
+
+Since the most wiring I did was duct taping the camera's USB cable to the robot, I'll focus on the software side of things. On board this rover is a Raspberry Pi 4 and a Pixhawk microcontroller. The main driving system is GPS-based and controlled by the Pixhawk. The raspberry pi uses the camera to run a detection layer on top of the Pixhawk's pathing system that cuts power to the motors if it detects a person.
+
+<div className="flex">
+    <div className="w-1/2">![rpi](/images/food-rover/raspberrypi.jpg)</div>
+    <div className="w-1/2">![pixhawk](/images/food-rover/pixhawk.jpeg)</div>
+</div>
+
+### GPS navigation
+
+We decided on GPS navigation because the robot would be driving outside and only has to know how to get from the front gate to the dorms.
+This works by defining a series of GPS waypoints (in a mission control software) to create a path.
+We can then use ArduPilot to break this path down into motor commands for the Pixhawk to follow.
+
+![mission](/images/food-rover/mission-planner.jpeg)
+
+The system is surprisingly accurate, and is often enough to get the robot to its destination, but for moments when it's not, we need a backup.
+
+### Object detection
+
+To detect people, I'm running a pre-trained tensorflow lite model and feeding it frames from a webcam that's plugged into the raspberry pi.
+If the model determines that there's a person in the frame, the rover isn't immediately stopped.
+Instead, it checks if the dimensions of the detection intersect with the "hot zone" (the area in front of the rover that it's likely to drive into).
+
+<div className="flex">
+    <div className="w-1/2">![undetected](/images/food-rover/undetected.png)</div>
+    <div className="w-1/2">![detected](/images/food-rover/detected.png)</div>
+</div>
+
+The rest of this system is visualization (drawing boxes on the frame) and logging so that we can see what the rover is doing and why it's doing it. Since the raspberry pi has a wifi chip, you can use VNC Viewer to connect to it and see what it's seeing (except near the front gate - the connection is terrible there).
