@@ -20,4 +20,5 @@ export const tagColors: {
     AWS: "#7dd3fc",
     FFmpeg: "#6ee7b7",
     ThreeJS: "#feba74",
+    ContentLayer: "#c4b5fd",
 }
