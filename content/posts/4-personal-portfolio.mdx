@@ -23,13 +23,65 @@ I also wanted space for thumbnail images on my new site, so I could give the use
 
 These examples were some of my main inspirations for my new site:
 
-<div class="grid grid-cols-2 gap-2">
-    <div className="h-48">![Image 1](/images/portfolio/chirpy.png)</div>
-    <div className="h-48">![Image 2](/images/portfolio/nobellium.png)</div>
-    <div className="h-48">![Image 3](/images/portfolio/taxonomy.png)</div>
-    <div className="h-48">![Image 4](/images/portfolio/snakebyte.png)</div>
+<div class="grid sm:grid-cols-2 grid-cols-1 gap-2">
+    <div className="sm:h-48 h-64">![Image 1](/images/portfolio/chirpy.png)</div>
+    <div className="sm:h-48 h-64">![Image 2](/images/portfolio/nobellium.png)</div>
+    <div className="sm:h-48 h-64">![Image 3](/images/portfolio/taxonomy.png)</div>
+    <div className="sm:h-48 h-64">![Image 4](/images/portfolio/snakebyte.png)</div>
 </div>
 
 I wanted the articles layouts of the top two sites, and I wanted the thumbnail images and tagging of the bottom two sites.
 
 Minimalism was the name of the game for this site. And I wanted to use the latest and greatest technologies to make it.
+
+# How I built it
+
+### Home Page
+
+I knew from looking at other tech blog projects that I would write my articles in markdown then use some kind of markdown parser to conver the files into HTML. I had the option of using a static site generator (SSG) like Gatsy or Jekyll, but I had previously decided on using NextJS for my site. This also meant that I could use <a href="https://www.contentlayer.dev/" target="_blank">ContentLayer</a> as my markdown cms/parser since it plugs in easily with NextJS.
+On the NextJS website I found a template blog that used ContentLayer, so I used that as a starting point for my site.
+
+![template](/images/portfolio/template.png)
+
+It needed some work, but it was an excellent starting point and let me focus on the design of my site instead of the markdown parsing. I made a lot of changes to the template, but the main ones on the homepage were:
+
+1. Widening the content of the pages and using the new space to add thumbnail images to the articles.
+
+2. Changing the home button to an icon on the navbar and adding a short introduction below the title of the page.
+
+3. Adding a tagging system to the articles so you can see what technologies I'm using at a glance.
+
+![myversion](/images/portfolio/myversion.jpeg)
+
+The information for each of these articles is stored in the header of their respective MDX file.
+
+```md
+---
+title: Personal Portfolio Site (This Website)
+description: Creating a tech blog website/portfolio to store additional information about my projects.
+date: "2023-05-12"
+cover: "/covers/portfolio-site.png"
+tags: { "TypeScript": true, "NextJS": true, "TailwindCSS": true, "ContentLayer": true }
+github: "https://github.com/Kickblip/wchprojects.com"
+live: "https://www.wchprojects.com/"
+---
+```
+
+### Project Page
+
+For the actual project pages, I needed to incorporate two links into every project - the github repo and the live demo.
+
+![templatearticle](/images/portfolio/templatearticle.png)
+
+The template didn't have anything like this, so I made a new component that would take in the github and live links as props and display them as buttons. I wanted this component to float down the page as the user scrolled and I decided putting it on the right would look cool.
+So I made the width of the text content less than the home page and moved it to the left of the screen, leaving room for my new component on the right.
+
+![myversionarticle](/images/portfolio/myversionarticle.gif)
+
+Of course, some of my projects are closed source or they don't have a live demo (or both), so I made the header arguments optional in my articles.
+This means that if the component doesn't provide a link to a repo or demo, the button becomes a disabled grey color and doesn't link anywhere.
+
+<div className="flex">
+    <div className="w-1/2">![buttons1](/images/portfolio/buttons1.png)</div>
+    <div className="w-1/2">![buttons2](/images/portfolio/buttons2.png)</div>
+</div>
