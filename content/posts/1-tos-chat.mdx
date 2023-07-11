@@ -7,54 +7,68 @@ tags: { "TypeScript": true, "NextJS": true, "TailwindCSS": true, "Pinecone": tru
 live: "https://www.tos.chat/"
 ---
 
-# A New Way to Read the TOS
+# A New Way to Read the Terms of Service
 
-In today's digital age, it's nearly impossible to avoid using apps and online services that collect our personal information. However, that doesn't mean we shouldn't care about our privacy. Tech companies try to make this difficult by drafting pages of complex, incomprehensible legal jargon. TOS Chat is a way to break down those barriers. I believe that every person should, at the very least, understand what they’re agreeing to. TOS Chat lets you "chat" with these company documents. In this blog post, we will dive into the technical details of the project, which utilizes the OpenAI API, LangChain, Pinecone (an external vector store for semantic search), and NextJS to bring it all together.
+In today's digital age, it's nearly impossible to avoid using apps and online services that collect our personal information. However, that doesn't mean we shouldn't care about our privacy. Tech companies try to make this difficult by drafting pages of complex, incomprehensible legal jargon. TOS Chat is a way to break down those barriers. I believe that every person should, at the very least, understand what they’re agreeing to.
+
+TOS Chat lets you "chat" with these company documents. It uses the OpenAI API, LangChain, Pinecone (an external vector database), and NextJS to bring transparency to the terms of service.
 
 ![hero](/images/tos-chat/hero.png)
 
 # How is this different from ChatGPT?
 
-When it comes to specific, contextually-based questions - ChatGPT tends to be confidently incorrect. One of the most infamous problems with ChatGPT is its complete lack of sources. It’s unable to tell you where it got the information for its answer because it likely comes from many different places. This is perfectly fine for almost every use case of these LLM chatbots, but when it comes to company legal docs, answers need to be directly from the text
+The key difference between TOS Chat and ChatGPT is how I'm treating sources. ChatGPT may be able to answer a terms of service question correctly, but since it doesn't provide its sources, it's very difficult to know if it's right. TOS Chat takes a context-first approach, clearly displaying the excerpts used for each answer. This allows the user to easily verify the chatbot's answers and understand the context behind them.
 
-# PDF Ingestion
+# How does it work?
 
-The main issue with this project is dealing with long documents. TOS Chat needs a way to read the document the user is asking questions about, but you can’t just upload a PDF file to ChatGPT. Furthermore, the GPT models have token limits (a ‘token’ is a part of a word - like a syllable) that both the question **AND** the AI’s answer need to fit under. GPT-3.5-turbo (the LLM model I used) has a token limit of 4096 - which isn’t nearly enough to consider just dumping the entire text document into the question.
+Let's take a closer look at the architecture of the TOS Chat system.
+
+### PDF Ingestion
+
+My main obstacle is dealing with long documents.
+I need a way to get the PDF content into the OpenAI API, but the API only accepts text.
+
+Furthermore, the GPT models have token limits (a ‘token’ is a part of a word - like a syllable) that **both** the user's question and the AI's answer need to fit within. GPT-4 (the LLM model I'm using) has a token limit of 8,192 - which isn’t nearly enough to paste in the entire document.
 
 So what if you stored the text documents in some kind of database, then only pasted in sections of the document that were relevant to the user’s question?
 
-# Text Splitting and Parsing
+### Text Splitting and Parsing
 
-This brings us to our first step - splitting the PDF document into manageable text chunks. PDFs can be difficult to work with because they often contain elements like headers, footers, images, tables, etc., which make parsing and understanding the text content more challenging.
+Before we upload the PDF text, we have to split it into manageable chunks.
+PDFs can be difficult to work with because they often contain elements like headers, footers, images, and tables which make parsing and the text more challenging.
 
-To resolve this, we first convert the PDF document into plain text. From there, we can move on to text parsing. Text parsing is a process where we break down the text into smaller units, a method often referred to as "chunking". In our case, we need to create chunks that are small enough to fit within the token limit of the GPT-3.5-turbo model, but also large enough to contain meaningful information.
+To resolve this, we first convert the PDF document into plain text so it looks similar to a markdown file. Then, we break the text into smaller units, a method called "chunking". In our case, we need to create chunks that are small enough to fit within the token limit of the GPT-4 model, but also large enough to contain meaningful information.
 
-I chose to chunk the text every 1000 characters, but that number is somewhat arbitrary. As long as you’re getting at least a couple sentences in each chunk, it’ll be okay.
+I chose to chunk the text every 800 characters, but that number is somewhat arbitrary. As long as you’re getting at least a couple sentences in each chunk, it’ll be okay.
 
-# Creating LangChain Documents
+### Creating LangChain Documents
 
-The next step is to convert these chunks of text into LangChain "documents". LangChain is a framework that makes the interacting with LLM (Large Language Model) APIs easier. A LangChain “document” is a format for storing chunked text. The chunked text is stored along with meta-data, such as its sequence in the original document and its source (the original PDF document). This meta-data helps us later to put the answers in context and provide accurate responses.
+The next step is to convert these chunks of text into LangChain "documents".
+LangChain is a framework that makes the interacting with LLM (Large Language Model) APIs easier. A LangChain “document” is a format for storing chunked text.
+
+The chunked text is stored along with meta-data, such as its sequence in the original document and its source (the original PDF document). This meta-data helps us later to put the answers in context and provide accurate responses.
+
+### Uploading Text Chunks to Pinecone
 
 ![semantic-search](/images/tos-chat/semantic-search.png)
 
-# Uploading Text Chunks to Pinecone
+However, the LangChain documents still aren't ready to be uploaded. They still need to be converted to vectors. I do this with OpenAI’s `text-embedding-ada-002` model, which generates an embedding for each document. Embeddings are 1536 dimension vectors that retain the “meaning” of the provided text. Our new embeddings are then uploaded to Pinecone.
 
-Once the text chunks are transformed into LangChain documents, we send them to OpenAI’s ‘text-embedding-ada-002’ model, which generate embeddings from the text. An embedding is a 1536 dimension vector that tries to retain the “meaning” of the provided text. We generate one vector for each of our LangChain documents, then upload those vectors to a vector database (Pinecone).
+Instead of a traditional database where data is stored in tables and searched by exact values or ranges, Pinecone stores data in a vector space and searches by comparing a query vector to the stored vectors using cosine similarity (or other distance metrics).
 
-Instead of a traditional database where data is stored in tables and searched by exact values or ranges, Pinecone stores data in a vector space and allows for searching by semantic similarity. That means, when a question is asked, Pinecone finds the chunk of text in the database that is semantically most similar to the question.
+Each embedding is stored in Pinecone under a namespace corresponding to its parent PDF document. This architecture isolates searches to specific documents, making the system highly efficient and scalable.
 
-Each embedding is stored in Pinecone under a namespace corresponding to the original PDF document. The namespace allows us to isolate searches within a specific document, making the system highly efficient and scalable. You can imagine it like a traditional database where each PDF file has its own dedicated table, and the 'rows' in that table are the LangChain documents derived from the text of the PDF.
-
-Now, when a user asks a question about a specific TOS document, we can search the corresponding namespace in Pinecone for the most relevant LangChain documents, send these documents to GPT-3.5-turbo, and get an accurate, sourced answer in return.
+Now, when a user asks a question about a specific TOS document, we can search the corresponding namespace in Pinecone for the most relevant LangChain documents, send these documents to GPT-4, and get an accurate, sourced answer in return.
 
 ![index](/images/tos-chat/index.png)
 
 # Hosting Challenges and the Switch to Heroku
 
-Initially, the TOS Chat website was hosted on Vercel, a popular platform for deploying web applications. However, a significant issue arose during the development process. The API handler, which was running as a serverless function, often faced timeouts due to its 10-second max execution time on Vercel. This limitation proved to be problematic, as it negatively impacted the user experience and the overall performance of the chatbot.
+Initially, the TOS Chat website was hosted on Vercel, a popular platform for deploying web applications. However, I started noticing issues immediately after deployment. The API handler, which was running as a serverless function, often faced timeouts due to Vercel's 10-second max execution time. This meant that if the chatbot took longer than 10 seconds to respond, the answer would never show up on the client.
 
 ![timeout.png](/images/tos-chat/timeout.png)
 
-Vercel offers a more advanced feature called Edge Functions that support higher execution times and additional capabilities such as data streams. Unfortunately, Edge Functions are not compatible with Node API functions, which were required for this project. One of the primary reasons behind this incompatibility is that the LangChain VectorStore package relies on the **`fs`** module, which is not supported in Vercel Edge Functions.
+Vercel offers a more advanced feature called Edge Functions that supports higher execution times and additional capabilities such as data streams (for the "typing" effect).
+Unfortunately, Edge Functions can't use most Node API functions, which were required for this project because LangChain's `VectorStore` package relies on the `fs` module (which is unsupported).
 
-To resolve these issues, the hosting platform was switched to Heroku. Heroku offers out-of-the-box support for data streams and Node APIs, making it a perfect fit for the project requirements. By migrating to Heroku, the timeout issues previously faced on Vercel were eliminated, improving the overall
+To resolve these issues, I switched hosting to Heroku. Heroku offers out-of-the-box support for data streams and Node APIs, making it the perfect fit for this project. After migrating, the timeout issues were eliminated, and the beautfiul typing effect was restored.
