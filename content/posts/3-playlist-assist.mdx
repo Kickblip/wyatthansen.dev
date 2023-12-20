@@ -7,56 +7,99 @@ tags: { "JavaScript": true, "Node": true, "APIs": true }
 github: "https://github.com/Kickblip/playlist-assist"
 ---
 
-# Introduction
-
-There's nothing quite like a well-curated Spotify playlist, but no matter how carefully we arrange songs, transitions between tracks can often be abrupt, disrupting the flow of our listening experience. Playlist-Assist, is a webapp I designed over the course of a few weeks for my school’s “Senior Independent Project” program near the end of our school year.
-
-The concept is simple: Playlist-Assist connects to your Spotify account and collects data on the songs you’re listening to. It uses this data to reorganize your playlist and pick out timestamps from your currently playing song and next song where it thinks a transition/segue would sound smooth.
-
-In this blog post, I'll dive deeper into the technical challenges I've faced during the development of Playlist-Assist, as well as the solutions I've implemented so far.
-
 <iframe
     src="https://www.youtube.com/embed/At7JKpYVbnc"
     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
     className="my-6 w-full h-[225px] md:w-[640px] md:h-[360px]"
 ></iframe>
 
+# Digital DJ-ing
+
+Many people curate their playlists, but fewer think about the transitions between songs.
+While it's easy to appreciate two songs that flow together seamlessly, trying to organize this effect in a playlist is a lot of work.
+Playlist Assist does it for you.
+I built this webapp during the final few weeks of my senior year of highschool as part of my school's “Senior Independent Project” program.
+
+Playlist Assist integrates directly with your Spotify account and analyzes the songs you're listening to.
+It reorganizes your playlist in the queue to improve flow, then automatically skips between songs and points that sound extremely similar.
+
 # Week 1: User Interface & Timer System
 
-The initial challenge was to provide an interface where users could visualize their upcoming songs. Since Playlist-Assist reshuffles the playlist during the ingestion phase, users should have a way of seeing their reshuffled playlist queue. The solution was a simple stack of info cards that the user can scroll through. Each card presents information like the song title, artist name, and an image of the album cover. All this information is readily available through the Spotify API.
+While this project did not need a robust UI, I wanted it to show more than just what was currently playing.
+I wanted a way to display the user's queue and post logs for what the app was doing.
+For the queue I settled on just a stack of cards on the lefthand side of the screen that contained song information.
+I got this info from the Spotify API that lets you get the metadata for a batch of song IDs.
+For the logging I thought a terminal-styled window on the right of the screen would look cool, so that's exactly what I did.
 
-Another critical aspect was timing. To smoothly transition between songs, Playlist-Assist needs to accurately measure the user's position within the current song. With the lack of support for webhooks and long-polling from the Spotify API, we had to rely on a local timer. This timer synchronizes with the Spotify player using periodic API calls, maintaining its accuracy with sub-millisecond precision. To account for natural drift that all computer programs experience, the timer adjusts itself on every iteration, creating a self-adjusting timer.
+![UI](/images/playlist-assist/playlist_assist.png)
+
+To smoothly transition between songs, Playlist Assist needs to accurately measure the user's position within the current song. 
+Without knowing the user's current timestamp, you can't know when to make the jump between songs.
+
+![Position](/images/playlist-assist/playing_music.png)
+
+The Spotify API lacks support for webhooks or long-polling so I had to set up a local timer to track this.
+Usually I would just use javascript's built in `setTimeout()` function, but since it has a drift I need to build one that accounts for drift on every iteration.
+
+```
+export default function Timer(callback, timeInterval, errorCallback) {
+    this.timeInterval = timeInterval;
+    this.start = () => {
+        this.expected = Date.now() + this.timeInterval;
+        this.timeout = setTimeout(this.round, this.timeInterval);
+        console.log('Started timer');
+    }
+    this.stop = () => {
+        clearTimeout(this.timeout);
+        console.log('Stopped timer');
+    }
+    this.round = () => {
+        let drift = Date.now() - this.expected; //the drift
+        if (drift > this.timeInterval) {
+            if (errorCallback) errorCallback();
+        };
+        callback();
+        this.expected += this.timeInterval;
+        this.timeout = setTimeout(this.round, this.timeInterval - drift);
+    }
+}
+```
+
+Even though the timer is accurate, I'll still want to periodically synchronize with Spotify.
+I'll do this to make sure that if the user skips ahead in their song the timestamp change is accounted for.
 
 # Week 2: Pre-processing & Beat-Finding
 
-To ensure the smoothness of transitions, songs in the playlist need to be pre-processed, a phase also known as the ingestion phase. The objective here is to rearrange the playlist so that similar-sounding tracks are arranged sequentially, creating a 'flow'. Moreover, the user's current song always remains in the first position, and the other songs are organized around it.
+To ensure the smoothness of transitions, songs in the playlist need to be pre-processed, I call this phase 'ingestion'. 
+The objective here is to rearrange the playlist so that similar-sounding tracks are near eachother, creating a 'flow'. 
+It is important to note that the user's current song will always remains in the first position during ingestion.
 
-This rearrangement process begins by converting track information from Spotify into vectors, preserving track IDs for later retrieval. Rather than using clustering algorithms, which proved to have limitations, we decided on an iterative comparison approach. Starting with the currently playing song, we compare it with all the other vectors in the queue, selecting the best match to follow the first song. This process is repeated recursively for the newly shuffled songs until the playlist is fully organized, ensuring an optimal flow.
+The rearrangement begins by retrieving tracks' information from Spotify and converting them to vectors.
 
-For comparing vectors, I used cosine similarity. While it's less accurate for lower-dimensional vectors, it was a norm I was familiar with. Future updates might involve experimenting with other norms for more accurate comparison.
+![vectors](/images/playlist-assist/shufflingvector.png)
 
-# Week 3: Refactoring & User Experience Enhancements
+Once the songs are represented as vectors, comparison can be done using cosine similarity, euclidean distance, or another norm.
+I chose euclidean distance because it was easiest to implement and cosine similarity is generally less accurate for lower dimensional vectors, but it may not be the best option here.
 
-With the project growing, it became necessary to refactor some parts of the codebase for better readability and error handling. One such change was standardizing the variable naming conventions. I chose "snake_case" over "camelCase" primarily because it seemed more readable.
+Starting with the currently playing song, we iteratively compare it with all the other vectors in the queue, selecting the best match to follow the first song. 
+Then, this process is repeated recursively starting from the newly placed song until the playlist is fully organized.
 
-Additionally, I created a logging window for users to get updates as the app works on their playlists. Writing updates is as simple as using: terminal.log('Queue shuffled successfully!'). Furthermore, a feature was implemented that allowed users to pause the reshuffling process and continue later. This was especially useful for larger playlists where reshuffling could take some time.
+# Week 3: Refactoring
+
+The third week of this project was spent reorganizing/improving my code and adding small features like a pause button. 
+Playlist Assist was the first larger scale project I worked on so I still had a lot to learn about how to organize a project.
 
 # Week 4: Beat Matching & Transitioning
 
-Now, this was perhaps the most exciting part of the project – beat matching and transitioning. We had two tasks here: first, identifying the beats in the songs; and second, finding identical beat-pairs for smooth transitions.
+To identify timestamps that can be transitioned, I need to get more specific information about a song from the Spotify API.
+Songs on Spotify are split into a hierarchy (bars, beats, sections, segments, tatums) where bars are the largest intervals and tatums are the smallest.
+Each group has its own data that can be accessed.
+For this project, segments had the most relevant data.
 
-For beat detection, I used a Python library called 'librosa.' It provides functionality to identify the onset of beats in a given audio file. However, librosa's beat tracker requires the actual audio file, not just the track information available through Spotify's API. For this reason, I implemented a workaround: Playlist-Assist suggests beat match points to the user who can then manually input these points. In the future, we could use a service like YouTube's API to fetch the actual audio file, but this would involve navigating the murky waters of copyright law.
+I looked to compare two songs' segments by converting each segment to a vector then comparing them similarly to how I handled ingestion.
+By doing this I could rank all the possible jumps in a song and then pick out the two segments that sounded most similar to use as a jump.
 
-To find identical beat-pairs, I used cross-correlation, a mathematical operation that essentially slides two signals over each other and compares the overlaps. The higher the cross-correlation value, the closer the beats in the two songs are to each other. Once an identical beat-pair is found, Playlist-Assist takes note of the exact point in the second song where the beat occurs and queues the song at this exact moment when the first song reaches the corresponding beat.
+This is an example of what a single segment's JSON looks like:
+![Example segment](/images/playlist-assist/segmentsnip.png)
 
-# Week 5: Improvements & Future Plans
-
-The final week involved refining the application and planning for future improvements. One enhancement was allowing users to select the reshuffling intensity - how closely the next song should match the current one. This feature gives users some degree of control over the 'flow' of their playlist.
-
-In terms of future plans, one exciting idea is to integrate machine learning for better beat-pair detection. Currently, the system requires the user to input beat points manually. A machine learning model could potentially learn to identify these points automatically.
-
-# Conclusion
-
-Overall, developing Playlist-Assist was an amazing learning experience, combining my love for music with coding. It's incredibly satisfying to see a shuffled playlist flow seamlessly from one song to the next. And the best part is, this project has so much more potential. As with any project, there are improvements to be made, and I'm excited about the direction Playlist-Assist is heading.
-
-Thank you for joining me on this development journey. I hope you found it interesting, and I look forward to sharing more updates on Playlist-Assist soon!
+Once a jump is found, it's handed off to the timer so Playlist Assist can know when to jump.
