@@ -10,16 +10,18 @@ live: "https://www.wchprojects.com/"
 
 # Why I created this site
 
-I love my first portfolio site - I think it's one of the coolest sites I've ever made. But it's not very practical. It's a bit hard to read and doesn't give me much room to include additional information/pictures about my projects.
+I love my first portfolio site - but it's not very practical. 
+It has no easy way to add additional information/pictures for projects and would start to look cramped over time.
 
 ![old site](/images/portfolio/old-site.gif)
 
-I wanted to create a new portfolio that was more like a blog site, with articles and images. This was also around the time that I was getting more experience with TypeScript, NextJS, and TailwindCSS, so I wanted to use those technologies to make a "state of the art" portfolio site.
+I wanted to create a new portfolio that was more like a blog site, with articles and images. 
+This was also around the time that I was getting more experience with NextJS and Tailwind, so I though I'd make a modern site.
 
 # My goals for this site
 
-The main thing I wanted was more space to write about my projects. My old site was just a collection of links to my projects github repos, it didn't have any information beyond the title and didn't have any space to link to live demos.
-I also wanted space for thumbnail images on my new site, so I could give the user a preview of each of my projects without them having the read the attached article.
+The main thing I wanted was more space to write about my projects. My old site was just a collection of links to my projects github repos, which wasn't super useful.
+I also wanted thumbnail images on my new site, so user's had a preview of each of my projects without having to read the attached post.
 
 These examples were some of my main inspirations for my new site:
 
@@ -30,30 +32,33 @@ These examples were some of my main inspirations for my new site:
     <div className="sm:h-48 h-64">![Image 4](/images/portfolio/snakebyte.png)</div>
 </div>
 
-I wanted the articles layouts of the top two sites, and I wanted the thumbnail images and tagging of the bottom two sites.
-
-Minimalism was the name of the game for this site. And I wanted to use the latest and greatest technologies to make it.
+I planned to adopt the layouts of the top two sites, and the thumbnail images/tagging of the bottom two sites.
 
 # How I built it
 
-### Home Page
+#### Home Page
 
-I knew from looking at other tech blog projects that I would write my articles in markdown then use some kind of markdown parser to conver the files into HTML. I had the option of using a static site generator (SSG) like Gatsy or Jekyll, but I had previously decided on using NextJS for my site. This also meant that I could use <a href="https://www.contentlayer.dev/" target="_blank">ContentLayer</a> as my markdown cms/parser since it plugs in easily with NextJS.
+I wanted to write my posts in markdown files which meant I would need a markdown parser.
+Static site generators like Gatsy and Jekyll make this easy but since I'm using NextJS it's a little tougher.
+I decided on using <a href="https://www.contentlayer.dev/" target="_blank">ContentLayer</a> as my markdown CMS/parser since it plugs in easily with NextJS.
 On the NextJS website I found a template blog that used ContentLayer, so I used that as a starting point for my site.
 
 ![template](/images/portfolio/template.png)
 
-It needed some work, but it was an excellent starting point and let me focus on the design of my site instead of the markdown parsing. I made a lot of changes to the template, but the main ones on the homepage were:
+It needed some work, but it was an excellent starting point and let me focus on the design of my site instead of the markdown parsing. 
+I made a lot of changes to the template, but the main ones on the homepage were:
 
-1. Widening the content of the pages and using the new space to add thumbnail images to the articles.
+1. Widening the content of the page and using the new space to add thumbnail images to the articles.
 
-2. Changing the home button to an icon on the navbar and adding a short introduction below the title of the page.
+2. Cleaning up the bar at the top by using only icons.
 
-3. Adding a tagging system to the articles so you can see what technologies I'm using at a glance.
+3. Adding my intro paragraph.
+
+4. Adding a tagging system to the articles so you can see what technologies I'm using at a glance.
 
 ![myversion](/images/portfolio/myversion.jpeg)
 
-The information for each of these articles is stored in the header of their respective MDX file.
+The information for each of these articles is stored in the header of their respective markdown file:
 
 ```md
 ---
@@ -67,18 +72,21 @@ live: "https://www.wchprojects.com/"
 ---
 ```
 
-### Project Page
+#### Project Page
 
 For the actual project pages, I needed to incorporate two links into every project - the github repo and the live demo.
 
+Here is the template before any of my changes:
 ![templatearticle](/images/portfolio/templatearticle.png)
 
-The template didn't have anything like this, so I made a new component that would take in the github and live links as props and display them as buttons. I wanted this component to float down the page as the user scrolled and I decided putting it on the right would look cool.
-So I made the width of the text content less than the home page and moved it to the left of the screen, leaving room for my new component on the right.
+The template didn't have anything like this, so I made a new component that would take in the github and live links as props and display them as buttons. 
+I wanted this component to float down the page as the user scrolled.
+To add space for the new floating buttons, I reduced the width of the text content and moved it over to the left.
 
+This is the modified version of the template after all my changes:
 ![myversionarticle](/images/portfolio/myversionarticle.gif)
 
-Of course, some of my projects are closed source or they don't have a live demo (or both), so I made the header arguments optional in my articles.
+Of course, some of my projects are closed source and some don't have live versions, so I made the header arguments optional in my articles.
 This means that if the component doesn't provide a link to a repo or demo, the button becomes a disabled grey color and doesn't link anywhere.
 
 <div className="flex">
