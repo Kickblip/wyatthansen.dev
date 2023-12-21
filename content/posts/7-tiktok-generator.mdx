@@ -9,8 +9,8 @@ github: "https://github.com/IP-2023/reddit-story-tiktok-bot"
 
 # Who would watch these?
 
-That's the question my mom asked me when I showed her the first video I generated. Since I deleted TikTok, I don't know how
-relevant this bot is anymore, but at the time of making it I was seeing a lot of the same type of video on my feed.
+That's the question my mom asked me when I showed her the first video I generated. 
+At the time of making this app, I was seeing a lot of the same type of video on my feed.
 
 <iframe
     src="https://www.youtube.com/embed/Y6xPVZGumCE"
@@ -18,15 +18,17 @@ relevant this bot is anymore, but at the time of making it I was seeing a lot of
     className="my-6 w-full h-[225px] md:w-[640px] md:h-[360px]"
 ></iframe>
 
-These videos are usually a screenshot of a reddit post, with a voiceover of the post being read out loud. The background is usually a video of a video game, or someone watching, or something else
-that is just a little bit interesting. It's a formula that works, and I wanted to see if I could automate it.
+These videos are usually a screenshot of a reddit post, with a voiceover of the post being read out loud. 
+The screenshot is overlayed on a muted background video that's unrelated to the main content. 
+It's a formula that works, and I wanted to see if I could automate it.
 
 # Getting Screenshots
 
-### Reddit API
+#### Reddit API
 
-The first component of this project is getting screenshots of the reddit posts. Before you can start screenshotting though, you'll need to find relevant
-posts to use. I used the reddit API to get the top posts on a given time frame (day/week/month) from a target subreddit.
+The first component of this project is getting screenshots of the reddit posts. 
+Before you can start screenshotting though, you'll need to find relevant posts to use. 
+I used the reddit API to get the top posts on a given time frame (day/week/month) from a target subreddit.
 
 ```javascript
 const response = await fetch(endpoint)
@@ -44,7 +46,9 @@ const postPromises = topPosts.map(async (post) => {
 const results = await Promise.all(postPromises)
 ```
 
-This will give you an array of posts, each with an array of comments. Then, it's just a matter of picking a post. I chose to pick the first post every time, but you could easily randomize this.
+This will give you an array of posts, each with an array of comments. 
+Then, it's just a matter of picking a post. 
+I chose to pick the first post every time, but you could easily randomize this.
 
 ```javascript
 const targetURL = `https://www.reddit.com${results[0].post.permalink}`
@@ -53,10 +57,10 @@ const targetComment2 = `https://www.reddit.com${results[0].comments[1].permalink
 const targetComment3 = `https://www.reddit.com${results[0].comments[2].permalink}`
 ```
 
-### Puppeteer
+#### Puppeteer
 
-Now that we have hyperlinks to the post and some relevant comments, we can start screenshotting. I used Puppeteer to do this, which is a headless browser that can be controlled with JavaScript.  
-First, I remove elements that will get in the way of the screenshot, like the prompt to download the reddit app, by filtering their tag.
+To screenshot the posts, I used Puppeteer, a headless browser that can be controlled with JavaScript.  
+Reddit has a couple pop-ups (like asking to download the mobile app) that needed to be removed every time I used Puppeteer.
 
 ```javascript
 const ad = document.getElementsByTagName("shreddit-comments-page-ad")
@@ -68,34 +72,9 @@ if (ad.length) {
 }
 ```
 
-You can find troublesome elements by watching the Puppeteer browser in non-headless mode, and then using the dev tools to find the element's tag.
-
-Next, I take the actual screenshot by looking for a post element or comment element, and then taking a screenshot of that element.
-
-```javascript
-if (urls.indexOf(url) === 0) {
-    // if the first url, take a screenshot of the post
-    const target = document.getElementsByTagName("shreddit-post")[0].getBoundingClientRect()
-    return {
-        x: target.x || 0,
-        y: target.y || 60,
-        width: target.width || 375,
-        height: target.height || 210,
-    }
-} else {
-    // after the first url, take a screenshot of the comment using its body dimensions
-    const body = document.getElementById("-post-rtjson-content").getBoundingClientRect()
-    return {
-        x: 0,
-        y: 435,
-        width: 375,
-        height: body.height + 85 || 300,
-    }
-}
-```
-
-The most important part of the screenshot is to adjust the dimensions of the screenshot so they fit the content nicely. You can use the height of the post/comment DOM element itself
-to ensure that the screenshot is capturing all the content. As programmers I feel that we often take pride in the smallest details that users take for granted, and this is certainly one of those details.
+You can find troublesome elements by running Puppeteer in non-headless mode.
+Once you have the tag for the element it's easy to find and remove.
+Once the ads are gone, Puppeteer searches for the comment/post element in the DOM and adjusts the screenshot to its dimensions.
 
 <div className="flex">
     <div className="w-1/2 p-0.5">![before](/images/tiktok-generator/post.png)</div>
@@ -104,17 +83,18 @@ to ensure that the screenshot is capturing all the content. As programmers I fee
 
 # Creating the Voiceover
 
-### AWS Polly
+#### AWS Polly
 
-Now that we have the screenshot, we can create the voiceover. This part is really easy. I used AWS Polly to do this, which is Amazon's text-to-speech service. The API is pretty simple, you just pass in the text you want to be read, and it returns an audio stream
-that can written to a file.
+Now that we have the screenshot, we can create the voiceover from the text content of the Reddit post.
+This text is from the initial Reddit API call, not the screenshot.
+I used AWS Polly, Amazon's text-to-speech API to generate audio files for the text.
 
 ```javascript
 polly.synthesizeSpeech(params, (err, data) => {
     if (err) {
         console.error(err)
     } else {
-        // // Write the TTS audio stream to a file
+        // write the TTS audio stream to a file
         fs.writeFileSync(`tts-${i}.mp3`, data.AudioStream, "binary")
         console.log(`TTS audio file written to tts-${i}.mp3`)
     }
@@ -123,24 +103,11 @@ polly.synthesizeSpeech(params, (err, data) => {
 
 # Finding Background Footage
 
-### YouTube API
+#### YouTube API
 
-Now that we have the screenshot and the voiceover, we need to find some background footage. I used the YouTube API to do this, which is a REST API that allows you to search for videos.
-
-```javascript
-const searchQuery = req.query.search_query
-
-youtube.search.list({
-    part: "snippet",
-    q: searchQuery,
-    maxResults: 25, //max 50
-    type: "video",
-    // videoDuration: "short"
-})
-```
-
-The most important part of this is the `videoDuration` parameter. I found that the best videos to use as background footage were short videos, so I set the `videoDuration` to `short`.  
-This will return a list of links to videos that are less than 4 minutes long, which we can then use to download a background video.
+Now that we have the screenshot and the voiceover, we need to find some background footage. 
+I found that shorter videos were usually better because they had less filler content.
+The YouTube API returned hyperlinks which I could use the `ytdl-exec` library to download content from.
 
 ```javascript
 youtubedl(`https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`, {
@@ -153,41 +120,23 @@ youtubedl(`https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`, {
 
 # Bringing it all Together
 
-### FFmpeg
+#### FFmpeg
 
-Now that we have all the components, we can bring them together. FFmpeg is a popular command line tool that can be used to edit videos. I used a JavaScript wrapper for FFmpeg called fluent-ffmpeg to
-help me edit my videos directly in JavaScript. I use it by writing a series of commands that will be executed in order.
+FFmpeg is a popular command line tool for editing videos. 
+I used a FFmpeg wrapper called fluent-ffmpeg to edit my videos directly in JavaScript. 
+I use it by defining a series of objects that are later converted to one large command.
+The entire buffer includes over 20 objects (commands), but this is what one looks like:
 
 ```javascript
-{
-    filter: 'overlay',
-    options: {
-        x: '(main_w-overlay_w)/2',
-        y: 80,
-        enable: `between(t,${(durations[1] + durations[2] + durations[3])},${(durations[1] + durations[2] + durations[3] + durations[4])})`
-    },
-    inputs: ['overlayed3', 'sc4'],
-    outputs: 'overlayed4'
-},
 // mute the background footage
 {
     filter: 'volume',
     options: {
-        // enable: 'between(t,0,20)',
         volume: 0
     },
     inputs: '0:a',
     outputs: 'muted'
-},
-// trim audio of background video to end at the same time as the last tts audio file
-{
-    filter: 'atrim',
-    options: {
-        duration: `${durations[1] + durations[2] + durations[3] + durations[4]}`
-    },
-    inputs: 'muted',
-    outputs: 'trimmedAudio'
-},
+}
 ```
 
 And just like that, we have a video that can be posted on TikTok or any other short-form video platform!
