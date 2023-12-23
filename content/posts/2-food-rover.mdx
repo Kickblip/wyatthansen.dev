@@ -15,25 +15,24 @@ github: "https://github.com/Kickblip/delivery-robot"
 
 # Cameras, AI, and Food Delivery
 
-Regardless of whether you've used food delivery services like Doordash and Uber Eats, their convenience is undeniable. 
+Even if you don't use food delivery services like Doordash and Uber Eats, you can't deny their convenience.
 And when you're an international student living on campus, they're often the only option when you want non-cafeteria food.
 
-I went to a highschool that received boarding students from all over the world. 
-Unsurprisingly, boarding students loved using food delivery apps. 
-But they'd still have to walk all the way to the front gate to pick up their food (a surprisingly long journey). 
+I went to a highschool that received boarding students from all over the world.
+Unsurprisingly, boarding students loved using food delivery apps.
+But they'd still have to walk all the way to the front gate to pick up their food (a surprisingly long journey).
 So my friend, Jackson, and I decided to build a robot that would deliver food from the front gate to the dorms.
 
-Jackson (an electrical engineering major) was mostly interested in the hardware side of the rover. 
-I focused on the control systems that piloted the rover. 
-Specifically, I worked on a human detection system that would allow the rover to avoid obstacles and people.
+I focused on the control systems that piloted the rover because Jackson (an electrical engineering major) was mostly interested in the hardware.
+Specifically, I worked on a computer vision system that would allow the rover to avoid obstacles and people.
 
 ![rover](/images/food-rover/rover.jpeg)
 
 # The Software
 
-Since the most wiring I did was duct taping the camera's USB cable to the robot, I'll focus on the software side of things. 
-There are two boards on the rover, a Raspberry Pi and a Pixhawk microcontroller. 
-The main driving system is GPS-based and controlled by the Pixhawk. 
+Since the most wiring I did was duct taping the camera's USB cable to the robot, I'll focus on the software side of things.
+There are two boards on the rover, a Raspberry Pi and a Pixhawk microcontroller.
+The main driving system is GPS-based and controlled by the Pixhawk.
 The raspberry pi uses the camera to run a detection layer on top of the Pixhawk's pathing system that cuts power to the motors if it detects a person.
 
 <div className="flex">
@@ -49,7 +48,7 @@ The motor commands can then be executed by the Pixhawk to drive the rover betwee
 
 ![mission](/images/food-rover/mission-planner.jpeg)
 
-The system is surprisingly accurate, and is often enough to get the robot to its destination, but for moments when it's not, we need a backup.
+This system is surprisingly accurate, and is often enough to get the robot to its destination, but for moments when it's not, we need a backup.
 
 #### Object detection
 
@@ -63,5 +62,5 @@ So far reaction time has not been a huge issue though.
     <div className="w-1/2">![detected](/images/food-rover/detected.png)</div>
 </div>
 
-The rest of the detection system is visualization (drawing boxes on the frame) and logging so that we can see what the rover is doing and why it's doing it. 
+The rest of the detection system is visualization (drawing boxes on the frame) and logging so that we can see what the rover is doing and why it's doing it.
 Since the Raspberry Pi has a wifi card, you can use VNC Viewer to see through the rover's camera (except near the front gate - the connection is terrible there).

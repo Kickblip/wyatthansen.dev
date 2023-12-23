@@ -15,7 +15,7 @@ github: "https://github.com/Kickblip/playlist-assist"
 
 # Digital DJ-ing
 
-Many people curate their playlists, but fewer think about the transitions between songs.
+Many people curate their playlists, but few think about the transitions between songs.
 While it's easy to appreciate two songs that flow together seamlessly, trying to organize this effect in a playlist is a lot of work.
 Playlist Assist does it for you.
 I built this webapp during the final few weeks of my senior year of highschool as part of my school's “Senior Independent Project” program.
@@ -33,12 +33,12 @@ For the logging I thought a terminal-styled window on the right of the screen wo
 
 ![UI](/images/playlist-assist/playlist_assist.png)
 
-To smoothly transition between songs, Playlist Assist needs to accurately measure the user's position within the current song. 
+To smoothly transition between songs, Playlist Assist needs to accurately measure the user's position within the current song.
 Without knowing the user's current timestamp, you can't know when to make the jump between songs.
 
 ![Position](/images/playlist-assist/playing_music.png)
 
-The Spotify API lacks support for webhooks or long-polling so I had to set up a local timer to track this.
+The Spotify API lacks support for webhooks and long-polling so I had to set up a local timer to track this.
 Usually I would just use javascript's built in `setTimeout()` function, but since it has a drift I need to build one that accounts for drift on every iteration.
 
 ```
@@ -54,7 +54,7 @@ export default function Timer(callback, timeInterval, errorCallback) {
         console.log('Stopped timer');
     }
     this.round = () => {
-        let drift = Date.now() - this.expected; //the drift
+        let drift = Date.now() - this.expected; // the drift
         if (drift > this.timeInterval) {
             if (errorCallback) errorCallback();
         };
@@ -70,8 +70,8 @@ I'll do this to make sure that if the user skips ahead in their song the timesta
 
 # Week 2: Pre-processing & Beat-Finding
 
-To ensure the smoothness of transitions, songs in the playlist need to be pre-processed, I call this phase 'ingestion'. 
-The objective here is to rearrange the playlist so that similar-sounding tracks are near eachother, creating a 'flow'. 
+To ensure the smoothness of transitions, songs in the playlist need to be pre-processed, I call this phase 'ingestion'.
+The objective here is to rearrange the playlist so that similar-sounding tracks are near eachother, creating a 'flow'.
 It is important to note that the user's current song will always remains in the first position during ingestion.
 
 The rearrangement begins by retrieving tracks' information from Spotify and converting them to vectors.
@@ -81,12 +81,12 @@ The rearrangement begins by retrieving tracks' information from Spotify and conv
 Once the songs are represented as vectors, comparison can be done using cosine similarity, euclidean distance, or another norm.
 I chose euclidean distance because it was easiest to implement and cosine similarity is generally less accurate for lower dimensional vectors, but it may not be the best option here.
 
-Starting with the currently playing song, we iteratively compare it with all the other vectors in the queue, selecting the best match to follow the first song. 
+Starting with the currently playing song, we iteratively compare it with all the other vectors in the queue, selecting the best match to follow the first song.
 Then, this process is repeated recursively starting from the newly placed song until the playlist is fully organized.
 
 # Week 3: Refactoring
 
-The third week of this project was spent reorganizing/improving my code and adding small features like a pause button. 
+The third week of this project was spent reorganizing/improving my code and adding small features like a pause button.
 Playlist Assist was the first larger scale project I worked on so I still had a lot to learn about how to organize a project.
 
 # Week 4: Beat Matching & Transitioning

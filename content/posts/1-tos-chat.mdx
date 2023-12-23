@@ -9,14 +9,14 @@ live: "https://www.tos.chat/"
 
 # A New Way to Read the Terms of Service
 
-In today's digital age, it's nearly impossible to use the internet without apps and online services collecting our personal information. 
-However, that doesn't mean we shouldn't care about our privacy. 
-I believe that every person should, at the very least, understand what they’re agreeing to when they accept a terms of service agreement.
+In today's digital age, it's nearly impossible to use the internet without apps and online services collecting our personal information.
+However, that doesn't mean we shouldn't care about our privacy.
+I believe that every person should understand what they’re agreeing to when they accept a terms of service agreement.
 
 But tech companies don't make that easy.
-They draft pages of complex, incomprehensible legal jargon to discourage users from learning about collection practices. 
+They draft pages of complex, incomprehensible legal jargon to discourage users from learning about collection practices.
 TOS Chat is a response to those barriers.
-It uses GPT and a vector database to let users "chat" with these company documents.
+It connects GPT to an external vector database to let users "chat" with company documents.
 
 ![hero](/images/tos-chat/hero.png)
 
@@ -26,14 +26,14 @@ TOS Chat runs on the same language model as ChatGPT (GPT 4) but it has some adde
 
 #### Sources
 
-ChatGPT does not share the sources for its answers.
-It also will very rarely admit to not knowing the answer to a question.
+ChatGPT doesn't provide sources for its answers.
+It also rarely admits to not knowing the answer to a question.
 The only way to be sure ChatGPT is not hallucinating in its answer is by reading the terms of service, which nobody wants to do.
-On the other hand, by storing legal documents in a vector database, TOS Chat can provide an exact quote from the document that it used to contextualize its answer.
+On the other hand, by storing legal documents in a vector database, TOS Chat can provide the exact quote it used to contextualize its answer.
 
 #### Current information
 
-The second downside of using ChatGPT for this function is that companies like to change their agreements.
+The second downside of using ChatGPT for documents is that companies like to change their agreements.
 Since ChatGPT has knowledge cutoffs and doesn't operate on the most up to date data, it won't have access to the changes.
 However, since TOS Chat simply uses PDFs for information, it can always have the most up to date data on a company's collection practices.
 
@@ -50,19 +50,19 @@ This token limit is way too low to think about pasting the entire document into 
 
 #### Text Splitting and Parsing
 
-PDFs can be difficult to work with because they often contain elements like headers, footers, images, and tables which make parsing and the text more challenging.
+PDFs can be difficult to work with because they often contain elements like headers, footers, images, and tables which make parsing the text more challenging.
 
-To resolve this, we first convert the PDF document into plain text so it looks similar to a markdown file. 
-Then, we break the text into smaller units, a method called "chunking". 
+To resolve this, we first convert the PDF document into plain text so it looks similar to a markdown file.
+Then, we break the text into smaller units, a method called "chunking".
 In our case, we need to create chunks that are small enough to fit within the token limit of the GPT-4 model, but also large enough to contain meaningful information.
 
-I chose to chunk the text every 800 characters, but that number is somewhat arbitrary. 
+I chose to chunk the text every 800 characters, but that number is somewhat arbitrary.
 As long as you’re getting at least a couple sentences in each chunk, it’ll be okay.
 
 #### Creating LangChain Documents
 
 The next step is to convert these chunks of text into LangChain "documents".
-LangChain is a framework that makes the interacting with LLM (Large Language Model) APIs easier. 
+LangChain is a framework that makes interacting with LLM (Large Language Model) APIs easier.
 A LangChain “document” is a format for storing chunked text.
 
 The chunked text is stored along with metadata that helps trace it back to its origin in the parent document.
@@ -72,18 +72,17 @@ The chunked text is stored along with metadata that helps trace it back to its o
 ![semantic-search](/images/tos-chat/semantic-search.png)
 
 Before the text chunks are uploaded to the database, they need to be converted to vectors.
-I do this with OpenAI’s `text-embedding-ada-002` model, which generates an embedding for each text chunk. 
-Embeddings are 1536 dimension vectors that try to extract the “meaning” of the provided text. 
+I do this with OpenAI’s `text-embedding-ada-002` model, which generates an embedding for each text chunk.
+Embeddings are 1536 dimension vectors that try to extract the “meaning” of the provided text.
 Every embedding has 1536 dimensions, regardless of the length of the source text.
 Our new embeddings are then uploaded to Pinecone (a cloud vector store).
 
-Pinecone is searched by comparing a query vector to the stored vectors using cosine similarity (or other distance metrics).
+Pinecone is searched by comparing a query vector to the stored vectors using cosine similarity (or other norms).
 This is better than a traditional database because it will find chunks that are related in meaning to the user's question instead of in format.
 
-Each embedding is stored in Pinecone under a namespace corresponding to its parent PDF document. 
+Each embedding is stored in Pinecone under a namespace corresponding to its parent PDF document.
 This architecture isolates searches to specific documents, making the system highly efficient and scalable.
 
 ![index](/images/tos-chat/index.png)
 
 Now, when a user asks a question about a specific TOS document, we can search the corresponding namespace in Pinecone for the most relevant LangChain documents, send these documents to GPT-4, and get an accurate, sourced answer in return.
-
