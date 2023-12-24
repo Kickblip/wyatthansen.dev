@@ -21,4 +21,6 @@ export const tagColors: {
     FFmpeg: "#6ee7b7",
     ThreeJS: "#feba74",
     ContentLayer: "#c4b5fd",
+    Godot: "#6ee7b7",
+    Unity: "#7dd3fc",
 }

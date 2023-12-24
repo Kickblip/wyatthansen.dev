@@ -1,0 +1,107 @@
+---
+title: Game Jam Entries
+description: Two video games I made on different teams as part of the CSU Game Dev club for submission into game jam competitions.
+date: "2023-07-04"
+cover: "/covers/game-jam-entries.png"
+tags: { "Unity": true, "Godot": true, "APIs": true }
+github: "https://github.com/Kickblip/Spacekeep"
+live: "https://alex-d05.itch.io/spacekeep"
+---
+
+These are the two games I made during my first semester of game developer club.
+
+A game jam is a game development competition where a team of people compete to make a video game in a limited time frame.
+There’s also generally a theme that the game has to follow and teams aren’t allowed to use any premade assets or code.
+
+# Spacekeep
+
+The first game I worked on was for the Ludum Dare 54 game jam.  
+This was a 72 hour jam with the theme "Limited Space".
+I worked on a team with five other people, three of which were programmers.
+Our interpretation of this theme was limited _inventory_ space, so we settled on creating an inventory management game.
+We took inspiration from the game [Dome Keeper](https://store.steampowered.com/app/1637320/Dome_Keeper/) and decided to set the game in space with evil aliens attacking.
+
+Most of my work on the game was related to mining.
+In order to upgrade their ship, the player had to venture out into space and mine asteroids for resources.
+The chance of valuable materials dropping also increases with the distance from the mothership.
+
+I wanted mining to be a little cartoonish, so I made the asteroids bounce around when they were hit.
+To get this effect, I created a mini explosion whenever the player and an asteroid collide.
+A strong force is applied to both objects, but I made the ship immovable so it isn't affected.
+I also added a high drag to the asteroid so it comes to a stop quickly after being hit.
+
+<iframe
+    src="https://www.youtube.com/embed/eV7xR4D6L28"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    className="my-6 w-full h-[225px] md:w-[640px] md:h-[360px]"
+></iframe>
+
+For ore types, I defined four scriptable objects with different properties.
+Then, when an asteroid is destroyed, it spawns three ore chunk prefabs, randomly picking an ore type for each.
+Depending on the tier of the asteroid, the chance of getting a higher tier ore type is increased.
+In this video the different colors represent different ore types:
+
+<iframe
+    src="https://www.youtube.com/embed/lJajp0jwUGs"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    className="my-6 w-full h-[225px] md:w-[640px] md:h-[360px]"
+></iframe>
+
+The last contribution I made was to enemy spawning.
+Originally, we were trying to implement Boids to make the enemies move in a flocking pattern, but we ran out of time.
+Instead, I built a simple system that spawns enemies at predefined points near the edge of the map and moves them slowly towards the center.
+
+# Verminium
+
+The second game jam I participated in was the Spooktober Fest Jam.
+It was an internal game jam for the CSU Game Dev Club that lasted three weeks.
+This time, I worked with two other people and the theme was "Tiny Spooky Creatures" since it was being held in October.
+
+Verminium is about a rat in an abandoned city that collects trinkets and trades them for gear.
+The unique mechanic we came up with was that all the NPCs are GPT agents.
+GPT is the same LLM (Large Language Model) that powers ChatGPT.
+This meant that interactions between the player and NPCs were unscripted and unique on each playthrough.
+
+I was in charge of the trading system and bringing the AI NPCs to life.
+
+To protect my API keys I had to set up a middleman server that would handle requests between the game and the OpenAI API.
+I used Express.js to create the server and Langchain to make my API calls more manageable.
+
+![NPC Chart](/images/game-jam-entries/npcinteraction.png)
+
+I wrote a boilerplate prompt that would be used as a template for interactions.
+This helped the AI get into character and explained their role.
+
+This template was then filled with the player's question, the NPC and player items, and a summary of the chat history up to that point.
+
+This is what one template looked like:
+
+```
+{personality}
+========
+You are bartering with the player given the following information about the current state of the trade.
+========
+These are YOUR ITEMS (the number after each item is the value of the item):
+{npcItems}
+========
+These are THE PLAYERS ITEMS (the number after each item is the value of the item):
+{playerItems}
+========
+This is a summary of the previous messages between you and the player (if blank, this is the first interaction):
+{currentSummary}
+========
+Here's the user's NEW message:
+{userMessage}
+========
+NEVER mention the chat history and NEVER mention the value numbers.
+NEVER refuse a trade that has balanced value numbers.
+NEVER refuse to trade one of your items.
+NEVER continue to barter if the player has agreed to your offer.
+NEVER change your mind if the player has agreed to your offer.
+If the chat history and player message suggest that the player has agreed, ONLY say "Thank your for your business"
+```
+
+The response to this prompt was then chained into a followup prompt to generate a summary for the chat history and update a trade array.
+In this summary stage the AI also picked whether the iteraction should end.
+If the chat was ended then the most recent trade array would be used in game to update the player and NPC's inventory.
+The most difficult part of this process was getting GPT to follow the rules of the game because it often acted irrationally or out of character.
