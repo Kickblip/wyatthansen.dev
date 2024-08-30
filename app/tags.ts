@@ -23,4 +23,8 @@ export const tagColors: {
     ContentLayer: "#c4b5fd",
     Godot: "#6ee7b7",
     Unity: "#7dd3fc",
+    UploadThing: "#fca5a5",
+    Supabase: "#6ee7b7",
+    Stripe: "#f7df1e",
+    Mailgun: "#faa8d4",
 }
