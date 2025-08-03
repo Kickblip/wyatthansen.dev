@@ -10,23 +10,23 @@ live: "https://dulcet-froyo-c497b6.netlify.app/"
 
 # Background
 
-I built the vast majority of this project in a bored afternoon at school. 
-I was originally inspired by a video of an ascii donut spinning around. 
+I built the vast majority of this project in a bored afternoon at school.
+I was originally inspired by a video of an ascii donut spinning around.
 I loved the retro and minimalistic look of the final product and wanted to make my own.
 
 <iframe
-    src="https://www.youtube.com/embed/DEqXNfs_HhY"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    className="my-6 w-full h-[225px] md:w-[640px] md:h-[360px]"
+  src="https://www.youtube.com/embed/DEqXNfs_HhY"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  className="my-6 w-full h-[225px] md:w-[640px] md:h-[360px]"
 ></iframe>
 
 After looking at some shapes I settled on a dodecahedron because I thought it looked cool.
-I chose to build the site with ThreeJS, a JavaScript 3D graphics engine. 
+I chose to build the site with ThreeJS, a JavaScript 3D graphics engine.
 Letting ThreeJS handle the perspective and rendering meant that I could focus on creating polyhedra.
 
 # Calculating Polyhedra
 
-To build the geometries I used the data from a [collection of polyhedra models](http://www.georgehart.com/virtual-polyhedra/vp.html) made by George Hart. 
+To build the geometries I used the data from a [collection of polyhedra models](http://www.georgehart.com/virtual-polyhedra/vp.html) made by George Hart.
 
 ```javascript
 Tetrahedron: {
@@ -56,8 +56,8 @@ Tetrahedron: {
 ```
 
 The vertices are stored as an array of arrays, where each sub-array is the coordinates of a vertex.
-The edges are stored as an array of arrays, where each sub-array is the indices of the vertices that make up the edge. 
-The faces are stored as an array of arrays, where each sub-array is the indices of the vertices that make up the face. 
+The edges are stored as an array of arrays, where each sub-array is the indices of the vertices that make up the edge.
+The faces are stored as an array of arrays, where each sub-array is the indices of the vertices that make up the face.
 For this project, I'm only using the vertices and faces because that's all ThreeJS needs to construct the polyhedra.
 
 # Ascii Filter
@@ -67,8 +67,8 @@ The filter adds an element to the DOM that holds text.
 The ascii characters inside this big element are chosen based on the luminosity (brightness) of the pixels underneath.
 
 <div className="flex">
-    <div className="w-1/2">![before](/images/polyhedra/before.png)</div>
-    <div className="w-1/2">![after](/images/polyhedra/after.png)</div>
+  <div className="w-1/2">![before](/images/polyhedra/before.png)</div>
+  <div className="w-1/2">![after](/images/polyhedra/after.png)</div>
 </div>
 
 # Keeping it Simple

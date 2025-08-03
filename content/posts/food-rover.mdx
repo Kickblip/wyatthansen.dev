@@ -8,9 +8,9 @@ github: "https://github.com/Kickblip/delivery-robot"
 ---
 
 <iframe
-    src="https://www.youtube.com/embed/9QyPHuIHvvg"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    className="my-6 w-full h-[225px] md:w-[640px] md:h-[360px]"
+  src="https://www.youtube.com/embed/9QyPHuIHvvg"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  className="my-6 w-full h-[225px] md:w-[640px] md:h-[360px]"
 ></iframe>
 
 # Cameras, AI, and Food Delivery
@@ -36,8 +36,8 @@ The main driving system is GPS-based and controlled by the Pixhawk.
 The raspberry pi uses the camera to run a detection layer on top of the Pixhawk's pathing system that cuts power to the motors if it detects a person.
 
 <div className="flex">
-    <div className="w-1/2">![rpi](/images/food-rover/raspberrypi.jpg)</div>
-    <div className="w-1/2">![pixhawk](/images/food-rover/pixhawk.jpeg)</div>
+  <div className="w-1/2">![rpi](/images/food-rover/raspberrypi.jpg)</div>
+  <div className="w-1/2">![pixhawk](/images/food-rover/pixhawk.jpeg)</div>
 </div>
 
 #### GPS navigation
@@ -58,8 +58,8 @@ This reduces the amount of false alarms but can delay reaction times for the rov
 So far reaction time has not been a huge issue though.
 
 <div className="flex">
-    <div className="w-1/2">![undetected](/images/food-rover/undetected.png)</div>
-    <div className="w-1/2">![detected](/images/food-rover/detected.png)</div>
+  <div className="w-1/2">![undetected](/images/food-rover/undetected.png)</div>
+  <div className="w-1/2">![detected](/images/food-rover/detected.png)</div>
 </div>
 
 The rest of the detection system is visualization (drawing boxes on the frame) and logging so that we can see what the rover is doing and why it's doing it.

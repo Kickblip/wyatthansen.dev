@@ -4,13 +4,13 @@ Bootstrapped with Vercel's Next.js 13, Contentlayer [template](https://next-cont
 
 ## Techstack Used:
 
--   Framework: [Next.js](https://nextjs.org/)
--   Language: [TypeScript](https://www.typescriptlang.org/)
--   Styling: [Tailwind CSS](https://tailwindcss.com/)
--   Icons (mostly): [Heroicons](https://heroicons.com/)
--   Content: [MDX](https://mdxjs.com/)
--   Content Management: [Contentlayer](https://www.contentlayer.dev/)
--   Deployment: [Vercel](https://vercel.com/)
+- Framework: [Next.js](https://nextjs.org/)
+- Language: [TypeScript](https://www.typescriptlang.org/)
+- Styling: [Tailwind CSS](https://tailwindcss.com/)
+- Icons (mostly): [Heroicons](https://heroicons.com/)
+- Content: [MDX](https://mdxjs.com/)
+- Content Management: [Contentlayer](https://www.contentlayer.dev/)
+- Deployment: [Vercel](https://vercel.com/)
 
 ## Directory Structure
 

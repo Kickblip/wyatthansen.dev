@@ -9,25 +9,25 @@ github: "https://github.com/IP-2023/reddit-story-tiktok-bot"
 
 # Who would watch these?
 
-That's the question my mom asked me when I showed her the first video I generated. 
+That's the question my mom asked me when I showed her the first video I generated.
 At the time of making this app, I was seeing a lot of the same type of video on my feed.
 
 <iframe
-    src="https://www.youtube.com/embed/Y6xPVZGumCE"
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-    className="my-6 w-full h-[225px] md:w-[640px] md:h-[360px]"
+  src="https://www.youtube.com/embed/Y6xPVZGumCE"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  className="my-6 w-full h-[225px] md:w-[640px] md:h-[360px]"
 ></iframe>
 
-These videos are usually a screenshot of a reddit post, with a voiceover of the post being read out loud. 
-The screenshot is overlayed on a muted background video that's unrelated to the main content. 
+These videos are usually a screenshot of a reddit post, with a voiceover of the post being read out loud.
+The screenshot is overlayed on a muted background video that's unrelated to the main content.
 It's a formula that works, and I wanted to see if I could automate it.
 
 # Getting Screenshots
 
 #### Reddit API
 
-The first component of this project is getting screenshots of the reddit posts. 
-Before you can start screenshotting though, you'll need to find relevant posts to use. 
+The first component of this project is getting screenshots of the reddit posts.
+Before you can start screenshotting though, you'll need to find relevant posts to use.
 I used the reddit API to get the top posts on a given time frame (day/week/month) from a target subreddit.
 
 ```javascript
@@ -36,18 +36,18 @@ const data = await response.json()
 const topPosts = data.data.children.map((post) => post.data)
 
 const postPromises = topPosts.map(async (post) => {
-    const commentsEndpoint = `https://www.reddit.com/r/${subreddit}/comments/${post.id}.json`
-    const commentsResponse = await fetch(commentsEndpoint)
-    const commentsData = await commentsResponse.json()
-    const comments = commentsData[1].data.children.map((comment) => comment.data)
-    return { post, comments }
+  const commentsEndpoint = `https://www.reddit.com/r/${subreddit}/comments/${post.id}.json`
+  const commentsResponse = await fetch(commentsEndpoint)
+  const commentsData = await commentsResponse.json()
+  const comments = commentsData[1].data.children.map((comment) => comment.data)
+  return { post, comments }
 })
 
 const results = await Promise.all(postPromises)
 ```
 
-This will give you an array of posts, each with an array of comments. 
-Then, it's just a matter of picking a post. 
+This will give you an array of posts, each with an array of comments.
+Then, it's just a matter of picking a post.
 I chose to pick the first post every time, but you could easily randomize this.
 
 ```javascript
@@ -65,10 +65,10 @@ Reddit has a couple pop-ups (like asking to download the mobile app) that needed
 ```javascript
 const ad = document.getElementsByTagName("shreddit-comments-page-ad")
 if (ad.length) {
-    console.log("Removing shreddit-comments-page-ad elements")
-    for (const blocker of ad) {
-        blocker.remove()
-    }
+  console.log("Removing shreddit-comments-page-ad elements")
+  for (const blocker of ad) {
+    blocker.remove()
+  }
 }
 ```
 
@@ -77,8 +77,8 @@ Once you have the tag for the element it's easy to find and remove.
 Once the ads are gone, Puppeteer searches for the comment/post element in the DOM and adjusts the screenshot to its dimensions.
 
 <div className="flex">
-    <div className="w-1/2 p-0.5">![before](/images/tiktok-generator/post.png)</div>
-    <div className="w-1/2 p-0.5">![after](/images/tiktok-generator/comment-2.png)</div>
+  <div className="w-1/2 p-0.5">![before](/images/tiktok-generator/post.png)</div>
+  <div className="w-1/2 p-0.5">![after](/images/tiktok-generator/comment-2.png)</div>
 </div>
 
 # Creating the Voiceover
@@ -91,13 +91,13 @@ I used AWS Polly, Amazon's text-to-speech API to generate audio files for the te
 
 ```javascript
 polly.synthesizeSpeech(params, (err, data) => {
-    if (err) {
-        console.error(err)
-    } else {
-        // write the TTS audio stream to a file
-        fs.writeFileSync(`tts-${i}.mp3`, data.AudioStream, "binary")
-        console.log(`TTS audio file written to tts-${i}.mp3`)
-    }
+  if (err) {
+    console.error(err)
+  } else {
+    // write the TTS audio stream to a file
+    fs.writeFileSync(`tts-${i}.mp3`, data.AudioStream, "binary")
+    console.log(`TTS audio file written to tts-${i}.mp3`)
+  }
 })
 ```
 
@@ -105,16 +105,16 @@ polly.synthesizeSpeech(params, (err, data) => {
 
 #### YouTube API
 
-Now that we have the screenshot and the voiceover, we need to find some background footage. 
+Now that we have the screenshot and the voiceover, we need to find some background footage.
 I found that shorter videos were usually better because they had less filler content.
 The YouTube API returned hyperlinks which I could use the `ytdl-exec` library to download content from.
 
 ```javascript
 youtubedl(`https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`, {
-    noCheckCertificates: true,
-    noWarnings: true,
-    preferFreeFormats: true,
-    addHeader: ["referer:youtube.com", "user-agent:googlebot"],
+  noCheckCertificates: true,
+  noWarnings: true,
+  preferFreeFormats: true,
+  addHeader: ["referer:youtube.com", "user-agent:googlebot"],
 })
 ```
 
@@ -122,8 +122,8 @@ youtubedl(`https://www.youtube.com/watch?v=${encodeURIComponent(videoId)}`, {
 
 #### FFmpeg
 
-FFmpeg is a popular command line tool for editing videos. 
-I used a FFmpeg wrapper called fluent-ffmpeg to edit my videos directly in JavaScript. 
+FFmpeg is a popular command line tool for editing videos.
+I used a FFmpeg wrapper called fluent-ffmpeg to edit my videos directly in JavaScript.
 I use it by defining a series of objects that are later converted to one large command.
 The entire buffer includes over 20 objects (commands), but this is what one looks like:
 
