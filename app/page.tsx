@@ -5,6 +5,7 @@ import { tagColors } from "./tags"
 
 const displayOrder: string[] = [
   "flycatcher",
+  "inhouse-tracker",
   "tos-chat",
   "food-rover",
   "playlist-assist",

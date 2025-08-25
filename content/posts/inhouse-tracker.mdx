@@ -1,0 +1,66 @@
+---
+title: Inhouse Tracker for Longhorn LoL
+description: Website for tracking game statistics in League of Legends custom games.
+date: "2025-08-25"
+cover: "/covers/tracker.png"
+tags: { "TypeScript": true, "NextJS": true, "TailwindCSS": true, "MongoDB": true, "Supabase": true }
+github: "https://github.com/Kickblip/inhouse-tracker"
+live: "https://www.inhousetracker.com/"
+---
+
+League of Legends (LoL) is a free-to-play multiplayer online battle arena (MOBA) game developed by Riot Games,
+where two teams of five players compete to destroy the opposing team’s base. Each player controls a unique “champion”
+with distinct abilities, working together to strategize, fight, and gain advantages across a dynamic map.
+
+In the UT Austin League of Legends club, we often play _custom_ games where members form teams and compete against each other. Unlike regular matches, however, custom games aren’t recorded in Riot’s public match history. That means most third-party stat-tracking websites simply don’t support them.
+
+Because Riot doesn’t expose custom game data through their official API, our club initially tracked fun records (like “highest damage” or “most kills”) manually in Google Docs. Every time someone broke a record, we had to update it by hand. It quickly became clear there had to be a better way.
+
+---
+
+## Early Prototype
+
+The first version of **Inhouse Tracker** worked by reading text directly from post-game screenshots of custom matches. It was a hacky but functional approach while I waited for access to Riot’s official API.
+
+Once the project was approved for API access, the system evolved.
+
+---
+
+## How It Works Now
+
+The current version of Inhouse Tracker uses **Riot Sign On (OAuth)** to import custom game data. One player logs in, selects the match from their history, and the system ingests the data, even though it’s not normally available through the public API.
+
+The raw data is cleaned to remove unhelpful details, then stored in a MongoDB database.
+
+![Match Data](/images/inhouse-tracker/game-data.png)
+
+This system is faster and more reliable than the old screenshot approach, since it no longer depends on manual verification.
+
+---
+
+## Features
+
+Every imported game is stored, added to player profiles, and surfaced through searchable match histories.
+
+![Match History](/images/inhouse-tracker/match-history.png)
+
+From there, individual game statistics are aggregated into leaderboards for categories like kills, assists, or damage dealt.
+
+![Leaderboard](/images/inhouse-tracker/leaderboard.png)
+
+Beyond raw stats, Inhouse Tracker also introduces an **MMR-style ranking system**. Players earn points for hitting milestone performances, rewarding strong play without directly comparing club members against eachother.
+
+![MMR Leaderboard](/images/inhouse-tracker/mmr.png)
+
+---
+
+## Technical Notes
+
+- Images and champion assets are served via Riot’s official CDN.
+- Individual match histories and game pages are statically generated and only update when a new match is uploaded.
+- CDN images are cached for 30 days to reduce load on the CDN.
+
+---
+
+This project started as a fun way to keep track of our club’s bragging rights, but it’s grown into a fully featured tool for making custom games as rewarding as ranked play.
+Soon it will be used to track club tournaments as well, allowing us to give out better consolation prizes for teams that didn't get first or second place.
