@@ -1,19 +1,9 @@
 import { allPosts } from "@/.contentlayer/generated"
 import Link from "next/link"
-import HomeIntro from "@/components/home-intro"
-import { tagColors } from "./tags"
+import HomeIntro from "@/components/HomeIntro"
+import { tagColors } from "@/app/config"
 
-const displayOrder: string[] = [
-  "flycatcher",
-  "inhouse-tracker",
-  "tos-chat",
-  "food-rover",
-  "playlist-assist",
-  "personal-portfolio",
-  "game-jam-entries",
-  "polyhedra",
-  "tiktok-generator",
-]
+const displayOrder: string[] = ["flycatcher", "inhouse-tracker", "tos-chat", "food-rover", "playlist-assist", "game-jam-entries"]
 const orderMap: Record<string, number> = displayOrder.reduce((acc, slugAsParams, idx) => ({ ...acc, [slugAsParams]: idx }), {})
 const sortedPosts = [...allPosts].sort((a, b) => {
   const aRank = orderMap[a.slugAsParams] ?? Infinity
@@ -40,11 +30,11 @@ export default function Home() {
           </Link>
           <div className="w-full md:w-[60%]">
             <div className="p-0 md:mt-10">
-              {Object.entries(post.tags).map(([tag, active]) => (
+              {post.tags.map((tag: string) => (
                 <span
                   key={tag}
                   className="inline-block rounded py-0.5 px-1 m-1 text-xs font-medium text-black"
-                  style={{ backgroundColor: active ? tagColors[tag] : "#eaeaea" }}
+                  style={{ backgroundColor: tagColors[tag] ?? "#eaeaea" }}
                 >
                   {tag}
                 </span>

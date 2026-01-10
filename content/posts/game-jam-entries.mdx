@@ -1,9 +1,8 @@
 ---
 title: Game Jam Entries
 description: Two video games I made on different teams as part of the CSU Game Dev club for submission into game jam competitions.
-date: "2023-07-04"
-cover: "/covers/game-jam-entries.jpg"
-tags: { "Unity": true, "Godot": true, "APIs": true }
+cover: "/game-jam-entries/cover.webp"
+tags: ["Unity", "Godot", "APIs"]
 github: "https://github.com/Kickblip/Spacekeep"
 live: "https://alex-d05.itch.io/spacekeep"
 ---
@@ -67,7 +66,11 @@ I was in charge of the trading system and bringing the AI NPCs to life.
 To protect my API keys I had to set up a middleman server that would handle requests between the game and the OpenAI API.
 I used Express.js to create the server and Langchain to make my API calls more manageable.
 
-![NPC Chart](/images/game-jam-entries/npcinteraction.png)
+<ImageWithCaption
+  src={"/game-jam-entries/npcinteraction.png"}
+  alt={"Chart illustrating the NPC interaction flow"}
+  caption={"NPC interaction flow"}
+/>
 
 I wrote a boilerplate prompt that would be used as a template for interactions.
 This helped the AI get into character and explained their role.

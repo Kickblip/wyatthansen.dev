@@ -1,9 +1,8 @@
 ---
 title: Inhouse Tracker for Longhorn LoL
 description: Website for tracking game statistics in League of Legends custom games.
-date: "2025-08-25"
-cover: "/covers/tracker.jpg"
-tags: { "TypeScript": true, "NextJS": true, "TailwindCSS": true, "MongoDB": true, "Supabase": true }
+cover: "/inhouse-tracker/cover.webp"
+tags: ["TypeScript", "NextJS", "TailwindCSS", "MongoDB", "Supabase"]
 github: "https://github.com/Kickblip/inhouse-tracker"
 live: "https://www.inhousetracker.com/"
 ---
@@ -32,7 +31,11 @@ The current version of Inhouse Tracker uses **Riot Sign On (OAuth)** to import c
 
 The raw data is cleaned to remove unhelpful details, then stored in a MongoDB database.
 
-![Match Data](/images/inhouse-tracker/game-data.png)
+<ImageWithCaption
+  src={"/inhouse-tracker/game-data.png"}
+  alt={"Website UI showing data from a match"}
+  caption={"Website UI displaying data from a custom game"}
+/>
 
 This system is faster and more reliable than the old screenshot approach, since it no longer depends on manual verification.
 
@@ -42,15 +45,27 @@ This system is faster and more reliable than the old screenshot approach, since 
 
 Every imported game is stored, added to player profiles, and surfaced through searchable match histories.
 
-![Match History](/images/inhouse-tracker/match-history.png)
+<ImageWithCaption
+  src={"/inhouse-tracker/match-history.png"}
+  alt={"Website UI showing a players custom game match history"}
+  caption={"The match history of a player"}
+/>
 
 From there, individual game statistics are aggregated into leaderboards for categories like kills, assists, or damage dealt.
 
-![Leaderboard](/images/inhouse-tracker/leaderboard.png)
+<ImageWithCaption
+  src={"/inhouse-tracker/leaderboard.png"}
+  alt={"Website UI showing a club leaderboard"}
+  caption={"A club leaderboard populated with custom game data"}
+/>
 
 Beyond raw stats, Inhouse Tracker also introduces an **MMR-style ranking system**. Players earn points for hitting milestone performances, rewarding strong play without directly comparing club members against eachother.
 
-![MMR Leaderboard](/images/inhouse-tracker/mmr.png)
+<ImageWithCaption
+  src={"/inhouse-tracker/mmr.png"}
+  alt={"Overall MMR leaderboard for the club"}
+  caption={"The overall ranking of players in the club based on average performance"}
+/>
 
 ---
 

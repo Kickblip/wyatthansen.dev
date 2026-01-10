@@ -1,9 +1,8 @@
 ---
 title: Playlist Assist - Spotify Auto-DJ
 description: Spotify companion app that creates beat-matched transitions within your Spotify playlist.  Remotely controls your Spotify account from a website.
-date: "2023-04-11"
-cover: "/covers/playlist-assist.jpg"
-tags: { "JavaScript": true, "Node": true, "APIs": true }
+cover: "/playlist-assist/cover.webp"
+tags: ["JavaScript", "Node", "APIs"]
 github: "https://github.com/Kickblip/playlist-assist"
 ---
 
@@ -31,12 +30,20 @@ For the queue I settled on just a stack of cards on the lefthand side of the scr
 I got this info from the Spotify API that lets you get the metadata for a batch of song IDs.
 For the logging I thought a terminal-styled window on the right of the screen would look cool, so that's exactly what I did.
 
-![UI](/images/playlist-assist/playlist_assist.png)
+<ImageWithCaption
+  src={"/playlist-assist/playlist_assist.png"}
+  alt={"The Playlist Assist UI"}
+  caption={"The Playlist Assist UI"}
+/>
 
 To smoothly transition between songs, Playlist Assist needs to accurately measure the user's position within the current song.
 Without knowing the user's current timestamp, you can't know when to make the jump between songs.
 
-![Position](/images/playlist-assist/playing_music.png)
+<ImageWithCaption
+  src={"/playlist-assist/playing_music.png"}
+  alt={"Screenshot of the progress bar from Spotify"}
+  caption={"Playing music on Spotify"}
+/>
 
 The Spotify API lacks support for webhooks and long-polling so I had to set up a local timer to track this.
 Usually I would just use javascript's built in `setTimeout()` function, but since it has a drift I need to build one that accounts for drift on every iteration.
@@ -76,7 +83,11 @@ It is important to note that the user's current song will always remains in the 
 
 The rearrangement begins by retrieving tracks' information from Spotify and converting them to vectors.
 
-![vectors](/images/playlist-assist/shufflingvector.png)
+<ImageWithCaption
+  src={"/playlist-assist/shufflingvector.png"}
+  alt={"Code screenshot of remapping function"}
+  caption={"Feature vector remapped from API data"}
+/>
 
 Once the songs are represented as vectors, comparison can be done using cosine similarity, euclidean distance, or another norm.
 I chose euclidean distance because it was easiest to implement and cosine similarity is generally less accurate for lower dimensional vectors, but it may not be the best option here.
@@ -100,6 +111,7 @@ I looked to compare two songs' segments by converting each segment to a vector t
 By doing this I could rank all the possible jumps in a song and then pick out the two segments that sounded most similar to use as a jump.
 
 This is an example of what a single segment's JSON looks like:
-![Example segment](/images/playlist-assist/segmentsnip.png)
+
+<ImageWithCaption src={"/playlist-assist/segmentsnip.png"} alt={"JSON screenshot of Spotify API output"} />
 
 Once a jump is found, it's handed off to the timer so Playlist Assist can know when to jump.

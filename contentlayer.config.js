@@ -40,16 +40,13 @@ export const Post = defineDocumentType(() => ({
     description: {
       type: "string",
     },
-    date: {
-      type: "date",
-      required: true,
-    },
     cover: {
       type: "string",
       required: true,
     },
     tags: {
-      type: "json",
+      type: "list",
+      of: { type: "string" },
       required: true,
     },
     github: {

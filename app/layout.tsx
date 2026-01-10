@@ -1,11 +1,11 @@
-import Image from "next/image"
 import Link from "next/link"
 import "./globals.css"
 import { Inter } from "next/font/google"
-import { ThemeProvider } from "@/components/theme-provider"
-import { Analytics } from "@/components/analytics"
-import { ModeToggle } from "@/components/mode-toggle"
-import { HomeLink } from "@/components/home-link"
+import ThemeProvider from "@/components/ThemeProvider"
+import ModeToggle from "@/components/ModeToggle"
+import { BsHouse } from "react-icons/bs"
+import { IoHeart } from "react-icons/io5"
+import { LINKS } from "@/app/config"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -18,7 +18,7 @@ export const metadata = {
   locale: "en_US",
   siteName: "Wyatt's Portfolio",
   image: "/metacover.png",
-  url: "www.wchprojects.com/",
+  url: "wyatthansen.dev/",
   type: "website",
 }
 
@@ -36,23 +36,25 @@ export default function RootLayout({ children }: RootLayoutProps) {
           <div className="max-w-4xl mx-auto py-10 px-4">
             <header>
               <div className="flex items-center justify-between">
-                <HomeLink />
+                <Link href="/" className="border rounded-md w-8 h-8 flex items-center justify-center">
+                  <BsHouse size={18} className="" />
+                </Link>
+
                 <ModeToggle />
               </div>
             </header>
             <main className="w-full">{children}</main>
             <footer className="mt-10">
-              <div className="flex justify-center items-center space-x-1.5 text-black dark:text-white">
-                {"Made with "}
-                <Image src="/icons/love.png" alt="Icon" width={17} height={17} className="mx-2 invert-0 dark:invert" />
-                {" by "}
-                <Link href="https://github.com/Kickblip/wchprojects.com" target="_blank" rel="noopener noreferrer">
+              <div className="flex justify-center items-center gap-1.5 text-black dark:text-white">
+                <span>Made with</span>
+                <IoHeart size={17} />
+                <span>by</span>
+                <Link href={LINKS.repo} target="_blank" rel="noopener noreferrer">
                   <span className="underline font-medium">Kickblip</span>
                 </Link>
               </div>
             </footer>
           </div>
-          <Analytics />
         </ThemeProvider>
       </body>
     </html>

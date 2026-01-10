@@ -1,9 +1,8 @@
 ---
 title: Object Recognition in Autonomous Rover
 description: Adding a human detection system to a food delivery robot that serves boarding students on campus who don’t have easy access to food delivery services.
-date: "2023-01-02"
-cover: "/covers/food-rover.jpg"
-tags: { "Python": true, "OpenCV": true, "Raspberry Pi": true, "TFLite": true }
+cover: "/food-rover/cover.webp"
+tags: ["Python", "OpenCV", "Raspberry Pi", "TFLite"]
 github: "https://github.com/Kickblip/delivery-robot"
 ---
 
@@ -26,7 +25,7 @@ So my friend, Jackson, and I decided to build a robot that would deliver food fr
 I focused on the control systems that piloted the rover because Jackson (an electrical engineering major) was mostly interested in the hardware.
 Specifically, I worked on a computer vision system that would allow the rover to avoid obstacles and people.
 
-![rover](/images/food-rover/rover.jpeg)
+<ImageWithCaption src={"/food-rover/rover.jpeg"} alt={"Image of the food delivery rover"} />
 
 # The Software
 
@@ -36,8 +35,16 @@ The main driving system is GPS-based and controlled by the Pixhawk.
 The raspberry pi uses the camera to run a detection layer on top of the Pixhawk's pathing system that cuts power to the motors if it detects a person.
 
 <div className="flex">
-  <div className="w-1/2">![rpi](/images/food-rover/raspberrypi.jpg)</div>
-  <div className="w-1/2">![pixhawk](/images/food-rover/pixhawk.jpeg)</div>
+  <div className="w-1/2">
+    <ImageWithCaption
+      src={"/food-rover/raspberrypi.jpg"}
+      alt={"Image of Raspberry Pi"}
+      caption={"Raspberry Pi (left) and Pixhawk (right)"}
+    />
+  </div>
+  <div className="w-1/2">
+    <ImageWithCaption src={"/food-rover/pixhawk.jpeg"} alt={"Image of Pixhawk controller"} />
+  </div>
 </div>
 
 #### GPS navigation
@@ -46,7 +53,7 @@ We decided on GPS navigation because the robot would be driving outside and only
 You define the waypoints in Mission Control and the path is compiled to motor commands using ArduPilot.
 The motor commands can then be executed by the Pixhawk to drive the rover between waypoints.
 
-![mission](/images/food-rover/mission-planner.jpeg)
+<ImageWithCaption src={"/food-rover/mission-planner.jpeg"} alt={"Mission planning software"} />
 
 This system is surprisingly accurate, and is often enough to get the robot to its destination, but for moments when it's not, we need a backup.
 
@@ -58,8 +65,12 @@ This reduces the amount of false alarms but can delay reaction times for the rov
 So far reaction time has not been a huge issue though.
 
 <div className="flex">
-  <div className="w-1/2">![undetected](/images/food-rover/undetected.png)</div>
-  <div className="w-1/2">![detected](/images/food-rover/detected.png)</div>
+  <div className="w-1/2">
+    <ImageWithCaption src={"/food-rover/undetected.png"} alt={"Undetected example"} />
+  </div>
+  <div className="w-1/2">
+    <ImageWithCaption src={"/food-rover/detected.png"} alt={"Detected example"} />
+  </div>
 </div>
 
 The rest of the detection system is visualization (drawing boxes on the frame) and logging so that we can see what the rover is doing and why it's doing it.

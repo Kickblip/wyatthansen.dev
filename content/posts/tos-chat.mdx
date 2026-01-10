@@ -1,11 +1,12 @@
 ---
 title: TOS Chat - Custom AI Chatbot
 description: Custom GPT chatbot that allows the user to 'chat' with terms of service and privacy policy agreements. Documents are stored with Pinecone (a vector database) and queried with semantic search.
-date: "2023-01-03"
-cover: "/covers/tos-chat.jpg"
-tags: { "TypeScript": true, "NextJS": true, "TailwindCSS": true, "Pinecone": true, "LangChain": true, "MongoDB": true }
+cover: "/tos-chat/cover.webp"
+tags: ["TypeScript", "NextJS", "TailwindCSS", "Pinecone", "LangChain", "MongoDB"]
 live: "https://www.tos.chat/"
 ---
+
+**2026 DISCLAIMER: This project was built on an early version of GPT-3 in 2020, before ChatGPT included all these features out of the box.**
 
 # A New Way to Read the Terms of Service
 
@@ -18,11 +19,11 @@ They draft pages of complex, incomprehensible legal jargon to discourage users f
 TOS Chat is a response to those barriers.
 It connects GPT to an external vector database to let users "chat" with company documents.
 
-![hero](/images/tos-chat/hero.png)
+<ImageWithCaption src={"/tos-chat/hero.png"} alt={"The homepage of TOS Chat"} caption={"TOS Chat homepage"} />
 
 # TOS Chat Versus ChatGPT
 
-TOS Chat runs on the same language model as ChatGPT (GPT 4) but it has some added functionality that make it much better suited for handling legal documents.
+TOS Chat runs on the same language model as ChatGPT but it has some added functionality that make it much better suited for handling legal documents.
 
 #### Sources
 
@@ -69,7 +70,11 @@ The chunked text is stored along with metadata that helps trace it back to its o
 
 #### Uploading Text Chunks to Pinecone
 
-![semantic-search](/images/tos-chat/semantic-search.png)
+<ImageWithCaption
+  src={"/tos-chat/semantic-search.png"}
+  alt={"Chart illustrating semantic search flow"}
+  caption={"Semantic search"}
+/>
 
 Before the text chunks are uploaded to the database, they need to be converted to vectors.
 I do this with OpenAI’s `text-embedding-ada-002` model, which generates an embedding for each text chunk.
@@ -83,6 +88,10 @@ This is better than a traditional database because it will find chunks that are 
 Each embedding is stored in Pinecone under a namespace corresponding to its parent PDF document.
 This architecture isolates searches to specific documents, making the system highly efficient and scalable.
 
-![index](/images/tos-chat/index.png)
+<ImageWithCaption
+  src={"/tos-chat/index.png"}
+  alt={"Vector database analytics"}
+  caption={"Chunked embeddings being stored in Pinecone"}
+/>
 
 Now, when a user asks a question about a specific TOS document, we can search the corresponding namespace in Pinecone for the most relevant LangChain documents, send these documents to GPT-4, and get an accurate, sourced answer in return.
