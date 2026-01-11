@@ -54,7 +54,7 @@ export default async function PostPage({ params }: PostProps) {
     <div className="w-full">
       <div className="flex flex-col md:flex-row md:gap-10">
         <article className="py-6 prose dark:prose-invert mt-10 w-full md:flex-1 min-w-0">
-          <div className="mb-5 flex gap-1">
+          <div className="mb-5 flex flex-wrap gap-1">
             {post.tags.map((tag: string) => (
               <span
                 key={tag}

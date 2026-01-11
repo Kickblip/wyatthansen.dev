@@ -43,7 +43,7 @@ export default function Home() {
             />
           </Link>
           <div className="w-full md:w-[60%]">
-            <div className="p-0 md:mt-10 flex gap-1">
+            <div className="p-0 md:mt-10 flex flex-wrap justify-center md:justify-start gap-1">
               {post.tags.map((tag: string) => (
                 <span
                   key={tag}
