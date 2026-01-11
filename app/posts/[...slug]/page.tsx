@@ -92,7 +92,7 @@ export default async function PostPage({ params }: PostProps) {
                   <img className="object-cover rounded w-full h-full aspect-video" src={post.cover} alt={post.title} />
                 </Link>
                 <div className="w-full md:w-[60%]">
-                  <div className="p-0 md:mt-8 flex gap-1 flex-wrap max-w-md">
+                  <div className="p-0 md:mt-8 flex gap-1 flex-wrap justify-center md:justify-start">
                     {post.tags.map((tag: string) => (
                       <span
                         key={tag}
