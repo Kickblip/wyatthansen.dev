@@ -54,11 +54,11 @@ export default async function PostPage({ params }: PostProps) {
     <div className="w-full">
       <div className="flex flex-col md:flex-row md:gap-10">
         <article className="py-6 prose dark:prose-invert mt-10 w-full md:flex-1 min-w-0">
-          <div className="mb-5">
+          <div className="mb-5 flex gap-1">
             {post.tags.map((tag: string) => (
               <span
                 key={tag}
-                className="inline-block rounded py-0.5 px-1 m-1 text-xs font-medium text-black"
+                className="inline-block rounded py-0.5 px-1 text-xs font-medium text-black"
                 style={{ backgroundColor: tagColors[tag] ?? "#eaeaea" }}
               >
                 {tag}
@@ -87,16 +87,16 @@ export default async function PostPage({ params }: PostProps) {
                 key={post._id}
                 className="flex flex-col md:flex-row items-center md:items-start md:space-x-8 w-full text-center md:text-left mb-6 md:mb-0"
               >
-                <Link href={post.slug} className="aspect-w-16 aspect-h-9 md:w-[40%] w-full overflow-hidden">
+                <Link href={post.slug} className="md:w-[40%] w-full overflow-hidden">
                   {/* eslint-disable-next-line */}
-                  <img className="object-cover rounded w-full h-full" src={post.cover} alt={post.title} />
+                  <img className="object-cover rounded w-full h-full aspect-video" src={post.cover} alt={post.title} />
                 </Link>
                 <div className="w-full md:w-[60%]">
-                  <div className="p-0 md:mt-6">
+                  <div className="p-0 md:mt-8 flex gap-1 flex-wrap max-w-md">
                     {post.tags.map((tag: string) => (
                       <span
                         key={tag}
-                        className="inline-block rounded py-0.5 px-1 m-1 text-xs font-medium text-black"
+                        className="inline-block rounded py-0.5 px-1 text-xs font-medium text-black"
                         style={{ backgroundColor: tagColors[tag] ?? "#eaeaea" }}
                       >
                         {tag}

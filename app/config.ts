@@ -28,6 +28,9 @@ export const tagColors: {
   Stripe: "#f7df1e",
   Mailgun: "#faa8d4",
   Upstash: "#6ee7b7",
+  "Unreal Engine": "#fca5a5",
+  "Socket Programming": "#6ee7b7",
+  "C++": "#7dd3fc",
 }
 
 export const LINKS = {
