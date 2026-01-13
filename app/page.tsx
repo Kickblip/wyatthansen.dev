@@ -6,10 +6,11 @@ import Image from "next/image"
 
 const displayOrder: string[] = [
   "pvbridge",
+  "apriltag",
   "flycatcher",
+  "food-rover",
   "inhouse-tracker",
   "tos-chat",
-  "food-rover",
   "playlist-assist",
   "game-jam-entries",
 ]

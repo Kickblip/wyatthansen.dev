@@ -31,6 +31,7 @@ export const tagColors: {
   "Unreal Engine": "#fca5a5",
   "Socket Programming": "#6ee7b7",
   "C++": "#7dd3fc",
+  "Coordinate Frames": "#feba74",
 }
 
 export const LINKS = {
