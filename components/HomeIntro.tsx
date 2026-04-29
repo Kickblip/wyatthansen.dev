@@ -1,4 +1,5 @@
 import { LINKS } from "@/app/config"
+import CalEmbedButton from "@/components/CalEmbedButton"
 import Link from "next/link"
 
 export default function HomeIntro({ title, description }: { title: string; description: string }) {
@@ -14,6 +15,7 @@ export default function HomeIntro({ title, description }: { title: string; descr
         </Link>
       </div>
       <p className="dark:text-neutral-400 text-neutral-600">{description}</p>
+      <CalEmbedButton />
     </div>
   )
 }
