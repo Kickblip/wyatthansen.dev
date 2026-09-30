@@ -12,7 +12,7 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata = {
   title: "Wyatt's Portfolio",
   description:
-    "I like machine learning, robotics, and web development. I'm an undergraduate student working in the Human-Aware Planning and AI lab at CSU. Here are some of the projects I've worked on...",
+    "I like web development, robotics, and game development. I'm an undergraduate student studying Math at UT Austin. Here are some of the projects I've worked on...",
   author: "Wyatt",
   keywords: ["TypeScript", "Projects", "Portfolio", "JavaScript", "React", "Coding"],
   locale: "en_US",

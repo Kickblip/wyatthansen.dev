@@ -5,11 +5,11 @@ import { tagColors } from "@/app/config"
 import Image from "next/image"
 
 const displayOrder: string[] = [
+  "blueward",
   "pvbridge",
-  "apriltag",
   "flycatcher",
+  "apriltag",
   "food-rover",
-  "inhouse-tracker",
   "tos-chat",
   "playlist-assist",
   "game-jam-entries",
@@ -26,7 +26,7 @@ export default function Home() {
     <div className="prose dark:prose-invert w-full max-w-none">
       <HomeIntro
         title="Hi, I'm Wyatt"
-        description="I like machine learning, robotics, and web development. I'm an undergraduate student studying Math at UT Austin. Here are some of the projects I've worked on..."
+        description="I like web development, robotics, and game development. I'm an undergraduate student studying Math at UT Austin. Here are some of the projects I've worked on..."
       />
       <hr className="md:my-4 my-8" />
       {sortedPosts.map((post) => (
@@ -58,7 +58,9 @@ export default function Home() {
             <Link href={post.slug} className="no-underline">
               <h2 className="text-2xl font-bold hover:underline cursor-pointer mb-1 mt-2">{post.title}</h2>
             </Link>
-            <div className="text-sm dark:text-[#9c9c9c] text-[#737478]">{post.description && <p>{post.description}</p>}</div>
+            <div className="text-sm dark:text-[#9c9c9c] text-[#737478]">
+              {post.description && <p className="mt-0">{post.description}</p>}
+            </div>
           </div>
         </article>
       ))}
